@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply font-sans text-slate-900;
+  }
+}
+
+@layer utilities {
+  .money {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card-hover-glow {
+    transition: all 0.2s ease-in-out;
+  }
+  .card-hover-glow:hover {
+    transform: translateY(-2px);
+    border-color: #6366f1;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+  }
+}
+
+.recharts-wrapper *:focus {
+  outline: none;
+}
+
+.recharts-bar-rectangle {
+  transition: filter 0.15s ease-in-out;
+}
+.recharts-bar-rectangle:hover {
+  filter: brightness(1.15) drop-shadow(0 0 6px rgba(99, 102, 241, 0.35));
+}
+
+.dark input,
+.dark textarea {
+  color-scheme: dark;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+input[type='number'] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
