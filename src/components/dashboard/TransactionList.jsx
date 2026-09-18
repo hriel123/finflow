@@ -1,5 +1,5 @@
 import { ArrowUpRight, ArrowDownRight, Trash2, Inbox } from 'lucide-react';
-import { formatCurrency } from '../../utils/format.js';
+import { formatCurrency, formatDateBR } from '../../utils/format.js';
 import { useCurrency } from '../../hooks/useCurrency.js';
 
 export default function TransactionList({ transactions, onDelete }) {
@@ -41,7 +41,7 @@ export default function TransactionList({ transactions, onDelete }) {
                       {t.description}
                     </p>
                     <p className="text-xs text-slate-400 truncate">
-                      {t.category} · {new Date(t.date).toLocaleDateString('pt-BR')}
+                      {t.category} · {formatDateBR(t.date)}
                     </p>
                   </div>
                 </div>

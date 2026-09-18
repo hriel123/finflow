@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
     apiRequest('/auth/me', { token })
       .then(setUser)
       .catch(() => {
-        setToken(null);
+        persistToken(null);
         setUser(null);
       })
       .finally(() => setLoading(false));
