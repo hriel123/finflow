@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react';
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../../data/categories.js';
+import { useCategories } from '../../hooks/useCategories.js';
 import Select from '../common/Select.jsx';
 
 const TYPE_OPTIONS = [
@@ -8,15 +9,16 @@ const TYPE_OPTIONS = [
   { value: 'expense', label: 'Despesa' },
 ];
 
-const ALL_CATEGORIES = Array.from(new Set([...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES]));
-
-const CATEGORY_OPTIONS = [
-  { value: 'all', label: 'Todas as categorias' },
-  ...ALL_CATEGORIES.map((c) => ({ value: c, label: c })),
-];
-
 export default function TransactionsFilters({ filters, onChange }) {
   const { type, category, search } = filters;
+  const { categories: customCategories } = useCategories();
+  const allCategories = Array.from(
+    new Set([...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES, ...customCategories.map((c) => c.name)])
+  );
+  const categoryOptions = [
+    { value: 'all', label: 'Todas as categorias' },
+    ...allCategories.map((c) => ({ value: c, label: c })),
+  ];
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-4 flex flex-col sm:flex-row sm:flex-wrap gap-3">
@@ -36,7 +38,7 @@ export default function TransactionsFilters({ filters, onChange }) {
       <Select
         value={category}
         onChange={(v) => onChange({ category: v })}
-        options={CATEGORY_OPTIONS}
+        options={categoryOptions}
         className="sm:w-48"
       />
     </div>

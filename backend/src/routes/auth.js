@@ -6,6 +6,11 @@ import { authMiddleware } from '../middleware/auth.js';
 
 const router = Router();
 
+// Used in place of a real password hash when no user is found, so login takes
+// the same time whether or not the email is registered (avoids leaking
+// account existence via response timing).
+const DUMMY_HASH = bcrypt.hashSync('finflow-timing-defense', 10);
+
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -34,12 +39,8 @@ router.post('/login', async (req, res) => {
   }
 
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return res.status(401).json({ error: 'invalid credentials' });
-  }
-
-  const validPassword = await bcrypt.compare(password, user.password);
-  if (!validPassword) {
+  const validPassword = await bcrypt.compare(password, user?.password ?? DUMMY_HASH);
+  if (!user || !validPassword) {
     return res.status(401).json({ error: 'invalid credentials' });
   }
 

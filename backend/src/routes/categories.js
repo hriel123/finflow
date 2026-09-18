@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { prisma } from '../lib/prisma.js';
+import { prisma, findOwned } from '../lib/prisma.js';
 
 const router = Router();
 
@@ -38,11 +38,14 @@ router.get('/', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-  const existing = await prisma.category.findUnique({
-    where: { id: Number(req.params.id) },
-  });
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid category id' });
+  }
 
-  if (!existing || existing.userId !== req.userId) {
+  const existing = await findOwned(prisma.category, id, req.userId);
+
+  if (!existing) {
     return res.status(404).json({ error: 'category not found' });
   }
 

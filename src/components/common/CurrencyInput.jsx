@@ -1,14 +1,14 @@
 import { Plus, Minus } from 'lucide-react';
-
-function formatBRL(value) {
-  return (value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
+import { formatCurrency } from '../../utils/format.js';
+import { useCurrency } from '../../hooks/useCurrency.js';
 
 function round2(value) {
   return Math.round(value * 100) / 100;
 }
 
 export default function CurrencyInput({ value, onChange, step = 10, error = false, autoFocus = false }) {
+  const { currency } = useCurrency();
+
   function handleTextChange(e) {
     const digits = e.target.value.replace(/\D/g, '');
     const cents = digits === '' ? 0 : parseInt(digits, 10);
@@ -33,7 +33,7 @@ export default function CurrencyInput({ value, onChange, step = 10, error = fals
         type="text"
         inputMode="numeric"
         autoFocus={autoFocus}
-        value={formatBRL(value)}
+        value={formatCurrency(value, currency)}
         onChange={handleTextChange}
         className="flex-1 min-w-0 bg-transparent px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none"
       />

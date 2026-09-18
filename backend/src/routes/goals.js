@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { prisma } from '../lib/prisma.js';
+import { prisma, findOwned } from '../lib/prisma.js';
 
 const router = Router();
 
@@ -10,6 +10,17 @@ router.post('/', async (req, res) => {
     return res
       .status(400)
       .json({ error: 'title, category, icon, targetAmount and deadline are required' });
+  }
+
+  if (typeof targetAmount !== 'number' || !Number.isFinite(targetAmount) || targetAmount <= 0) {
+    return res.status(400).json({ error: 'targetAmount must be a positive number' });
+  }
+
+  if (
+    currentAmount !== undefined &&
+    (typeof currentAmount !== 'number' || !Number.isFinite(currentAmount) || currentAmount < 0)
+  ) {
+    return res.status(400).json({ error: 'currentAmount must be a non-negative number' });
   }
 
   const goal = await prisma.goal.create({
@@ -38,11 +49,14 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const goal = await prisma.goal.findUnique({
-    where: { id: Number(req.params.id) },
-  });
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid goal id' });
+  }
 
-  if (!goal || goal.userId !== req.userId) {
+  const goal = await findOwned(prisma.goal, id, req.userId);
+
+  if (!goal) {
     return res.status(404).json({ error: 'goal not found' });
   }
 
@@ -50,15 +64,32 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const existing = await prisma.goal.findUnique({
-    where: { id: Number(req.params.id) },
-  });
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid goal id' });
+  }
 
-  if (!existing || existing.userId !== req.userId) {
+  const existing = await findOwned(prisma.goal, id, req.userId);
+
+  if (!existing) {
     return res.status(404).json({ error: 'goal not found' });
   }
 
   const { title, description, category, icon, targetAmount, currentAmount, deadline } = req.body;
+
+  if (
+    targetAmount !== undefined &&
+    (typeof targetAmount !== 'number' || !Number.isFinite(targetAmount) || targetAmount <= 0)
+  ) {
+    return res.status(400).json({ error: 'targetAmount must be a positive number' });
+  }
+
+  if (
+    currentAmount !== undefined &&
+    (typeof currentAmount !== 'number' || !Number.isFinite(currentAmount) || currentAmount < 0)
+  ) {
+    return res.status(400).json({ error: 'currentAmount must be a non-negative number' });
+  }
 
   const goal = await prisma.goal.update({
     where: { id: existing.id },
@@ -77,11 +108,14 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-  const existing = await prisma.goal.findUnique({
-    where: { id: Number(req.params.id) },
-  });
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid goal id' });
+  }
 
-  if (!existing || existing.userId !== req.userId) {
+  const existing = await findOwned(prisma.goal, id, req.userId);
+
+  if (!existing) {
     return res.status(404).json({ error: 'goal not found' });
   }
 

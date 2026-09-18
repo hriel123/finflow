@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../../data/categories.js';
+import { useCategories } from '../../hooks/useCategories.js';
 import Modal from '../common/Modal.jsx';
 import Select from '../common/Select.jsx';
 import CurrencyInput from '../common/CurrencyInput.jsx';
@@ -21,7 +22,10 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
   const [date, setDate] = useState(transaction?.date ?? todayISO());
   const [errors, setErrors] = useState({});
 
-  const categories = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  const { categories: customCategories } = useCategories();
+  const staticCategories = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  const customNames = customCategories.filter((c) => c.type === type).map((c) => c.name);
+  const categories = Array.from(new Set([...staticCategories, ...customNames]));
 
   function handleTypeChange(newType) {
     setType(newType);

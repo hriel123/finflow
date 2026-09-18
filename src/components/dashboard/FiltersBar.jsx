@@ -1,4 +1,5 @@
-import { EXPENSE_CATEGORIES } from '../../data/categories.js';
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../../data/categories.js';
+import { useCategories } from '../../hooks/useCategories.js';
 import Select from '../common/Select.jsx';
 
 const PERIOD_OPTIONS = [
@@ -16,16 +17,19 @@ const TYPE_OPTIONS = [
   { value: 'expense', label: 'Despesas' },
 ];
 
-const CATEGORY_OPTIONS = [
-  { value: 'all', label: 'Todas as categorias' },
-  ...EXPENSE_CATEGORIES.map((c) => ({ value: c, label: c })),
-];
-
 const dateInputClass =
   'rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/30';
 
 export default function FiltersBar({ filters, onChange }) {
   const { period, customRange, type, category } = filters;
+  const { categories: customCategories } = useCategories();
+  const categoryNames = Array.from(
+    new Set([...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES, ...customCategories.map((c) => c.name)])
+  );
+  const categoryOptions = [
+    { value: 'all', label: 'Todas as categorias' },
+    ...categoryNames.map((c) => ({ value: c, label: c })),
+  ];
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-4 flex flex-col sm:flex-row sm:flex-wrap gap-3">
@@ -59,7 +63,7 @@ export default function FiltersBar({ filters, onChange }) {
       <Select
         value={category}
         onChange={(v) => onChange({ category: v })}
-        options={CATEGORY_OPTIONS}
+        options={categoryOptions}
         className="sm:w-48"
       />
     </div>

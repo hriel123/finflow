@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { prisma } from '../lib/prisma.js';
+import { prisma, findOwned } from '../lib/prisma.js';
 
 const router = Router();
 
@@ -14,6 +14,10 @@ router.post('/', async (req, res) => {
 
   if (type !== 'income' && type !== 'expense') {
     return res.status(400).json({ error: 'type must be "income" or "expense"' });
+  }
+
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
+    return res.status(400).json({ error: 'amount must be a positive number' });
   }
 
   const transaction = await prisma.transaction.create({
@@ -40,11 +44,14 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const transaction = await prisma.transaction.findUnique({
-    where: { id: Number(req.params.id) },
-  });
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid transaction id' });
+  }
 
-  if (!transaction || transaction.userId !== req.userId) {
+  const transaction = await findOwned(prisma.transaction, id, req.userId);
+
+  if (!transaction) {
     return res.status(404).json({ error: 'transaction not found' });
   }
 
@@ -52,11 +59,14 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const existing = await prisma.transaction.findUnique({
-    where: { id: Number(req.params.id) },
-  });
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid transaction id' });
+  }
 
-  if (!existing || existing.userId !== req.userId) {
+  const existing = await findOwned(prisma.transaction, id, req.userId);
+
+  if (!existing) {
     return res.status(404).json({ error: 'transaction not found' });
   }
 
@@ -64,6 +74,13 @@ router.put('/:id', async (req, res) => {
 
   if (type !== undefined && type !== 'income' && type !== 'expense') {
     return res.status(400).json({ error: 'type must be "income" or "expense"' });
+  }
+
+  if (
+    amount !== undefined &&
+    (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0)
+  ) {
+    return res.status(400).json({ error: 'amount must be a positive number' });
   }
 
   const transaction = await prisma.transaction.update({
@@ -81,11 +98,14 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-  const existing = await prisma.transaction.findUnique({
-    where: { id: Number(req.params.id) },
-  });
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid transaction id' });
+  }
 
-  if (!existing || existing.userId !== req.userId) {
+  const existing = await findOwned(prisma.transaction, id, req.userId);
+
+  if (!existing) {
     return res.status(404).json({ error: 'transaction not found' });
   }
 
