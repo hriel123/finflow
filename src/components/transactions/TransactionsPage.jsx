@@ -29,11 +29,11 @@ export default function TransactionsPage() {
   }, [transactions, filters]);
 
   function handleCreateSubmit(data) {
-    addTransaction(data);
+    return addTransaction(data);
   }
 
   function handleEditSubmit(data) {
-    updateTransaction(editingTransaction.id, data);
+    return updateTransaction(editingTransaction.id, data);
   }
 
   return (

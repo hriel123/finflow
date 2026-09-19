@@ -8,6 +8,11 @@ import goalsRoutes from './routes/goals.js';
 import categoriesRoutes from './routes/categories.js';
 import { authMiddleware } from './middleware/auth.js';
 
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET environment variable is not set.');
+  process.exit(1);
+}
+
 const app = express();
 
 app.use(cors());

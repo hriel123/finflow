@@ -26,9 +26,14 @@ export function AuthProvider({ children }) {
 
     apiRequest('/auth/me', { token })
       .then(setUser)
-      .catch(() => {
-        persistToken(null);
-        setUser(null);
+      .catch((err) => {
+        // Only a genuine auth failure (expired/invalid token) should sign the
+        // user out. A network hiccup or a cold backend (e.g. Render's free
+        // tier waking up) must not wipe a token that's still valid.
+        if (err.status === 401) {
+          persistToken(null);
+          setUser(null);
+        }
       })
       .finally(() => setLoading(false));
   }, [token]);

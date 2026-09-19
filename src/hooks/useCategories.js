@@ -3,7 +3,7 @@ import { apiRequest } from '../lib/api.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export function useCategories() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState('');
 
@@ -15,7 +15,10 @@ export function useCategories() {
 
     apiRequest('/categories', { token })
       .then(setCategories)
-      .catch((err) => console.error('Não foi possível carregar as categorias:', err));
+      .catch((err) => {
+        if (err.status === 401) logout();
+        console.error('Não foi possível carregar as categorias:', err);
+      });
   }, [token]);
 
   async function addCategory(name, type) {
@@ -29,6 +32,7 @@ export function useCategories() {
       setCategories((prev) => [...prev, created]);
       return true;
     } catch (err) {
+      if (err.status === 401) logout();
       setError(err.message);
       return false;
     }
@@ -38,8 +42,11 @@ export function useCategories() {
     try {
       await apiRequest(`/categories/${id}`, { method: 'DELETE', token });
       setCategories((prev) => prev.filter((c) => c.id !== id));
+      return true;
     } catch (err) {
+      if (err.status === 401) logout();
       console.error('Não foi possível excluir a categoria:', err);
+      return false;
     }
   }
 

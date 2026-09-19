@@ -11,7 +11,7 @@ function normalize(transaction) {
 }
 
 export function useTransactions() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
@@ -22,7 +22,10 @@ export function useTransactions() {
 
     apiRequest('/transactions', { token })
       .then((data) => setTransactions(data.map(normalize)))
-      .catch((err) => console.error('Não foi possível carregar as transações:', err));
+      .catch((err) => {
+        if (err.status === 401) logout();
+        console.error('Não foi possível carregar as transações:', err);
+      });
   }, [token]);
 
   async function addTransaction(transaction) {
@@ -33,8 +36,11 @@ export function useTransactions() {
         body: transaction,
       });
       setTransactions((prev) => [normalize(created), ...prev]);
+      return true;
     } catch (err) {
+      if (err.status === 401) logout();
       console.error('Não foi possível criar a transação:', err);
+      return false;
     }
   }
 
@@ -46,8 +52,11 @@ export function useTransactions() {
         body: patch,
       });
       setTransactions((prev) => prev.map((t) => (t.id === id ? normalize(updated) : t)));
+      return true;
     } catch (err) {
+      if (err.status === 401) logout();
       console.error('Não foi possível atualizar a transação:', err);
+      return false;
     }
   }
 
@@ -55,8 +64,11 @@ export function useTransactions() {
     try {
       await apiRequest(`/transactions/${id}`, { method: 'DELETE', token });
       setTransactions((prev) => prev.filter((t) => t.id !== id));
+      return true;
     } catch (err) {
+      if (err.status === 401) logout();
       console.error('Não foi possível excluir a transação:', err);
+      return false;
     }
   }
 

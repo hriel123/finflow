@@ -37,6 +37,20 @@ export default function Dashboard({ theme }) {
     [transactions, filters]
   );
 
+  // Charts always compare income vs. expense / the full category breakdown
+  // for the selected period, independent of the type/category filter (which
+  // only narrows the summary cards and the transaction list below).
+  const periodTransactions = useMemo(
+    () =>
+      filterTransactions(transactions, {
+        period: filters.period,
+        customRange: filters.customRange,
+        type: 'all',
+        category: 'all',
+      }),
+    [transactions, filters.period, filters.customRange]
+  );
+
   const income = useMemo(
     () =>
       filteredTransactions
@@ -57,12 +71,12 @@ export default function Dashboard({ theme }) {
 
   const monthlyData = useMemo(() => {
     const range = getPeriodRange(filters.period, filters.customRange);
-    return groupByMonth(filteredTransactions, range);
-  }, [filteredTransactions, filters.period, filters.customRange]);
+    return groupByMonth(periodTransactions, range);
+  }, [periodTransactions, filters.period, filters.customRange]);
 
   const categoryData = useMemo(
-    () => groupByCategory(filteredTransactions),
-    [filteredTransactions]
+    () => groupByCategory(periodTransactions),
+    [periodTransactions]
   );
 
   const topCategory = useMemo(() => getTopCategory(filteredTransactions), [filteredTransactions]);
