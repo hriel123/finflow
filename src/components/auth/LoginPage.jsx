@@ -40,11 +40,11 @@ export default function LoginPage() {
           </span>
         </div>
 
-        <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 p-1 mb-5">
+        <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden mb-5">
           <button
             type="button"
             onClick={() => setMode('login')}
-            className={`flex-1 text-sm font-medium py-1.5 rounded-lg transition-colors ${
+            className={`flex-1 text-sm font-medium py-1.5 transition-colors ${
               mode === 'login'
                 ? 'bg-primary-600 text-white'
                 : 'text-slate-500 dark:text-slate-400'
@@ -55,7 +55,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setMode('register')}
-            className={`flex-1 text-sm font-medium py-1.5 rounded-lg transition-colors ${
+            className={`flex-1 text-sm font-medium py-1.5 transition-colors ${
               mode === 'register'
                 ? 'bg-primary-600 text-white'
                 : 'text-slate-500 dark:text-slate-400'
