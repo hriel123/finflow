@@ -11,11 +11,17 @@ const router = Router();
 // account existence via response timing).
 const DUMMY_HASH = bcrypt.hashSync('finflow-timing-defense', 10);
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'name, email and password are required' });
+  }
+
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ error: 'invalid email format' });
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -62,6 +68,10 @@ router.put('/me', authMiddleware, async (req, res) => {
 
   if (!name || !email) {
     return res.status(400).json({ error: 'name and email are required' });
+  }
+
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ error: 'invalid email format' });
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
