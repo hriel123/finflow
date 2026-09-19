@@ -2,18 +2,57 @@ import { useState } from 'react';
 import { Wallet } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const SERVER_ERROR_MESSAGES = {
+  'invalid credentials': 'E-mail ou senha incorretos.',
+  'invalid email format': 'Informe um e-mail válido.',
+  'password must be at least 6 characters long': 'A senha deve ter pelo menos 6 caracteres.',
+  'name, email and password are required': 'Preencha nome, e-mail e senha.',
+  'email and password are required': 'Preencha e-mail e senha.',
+  'email already registered': 'Este e-mail já está cadastrado.',
+};
+
+function translateServerError(message) {
+  return SERVER_ERROR_MESSAGES[message] ?? message;
+}
+
 export default function LoginPage() {
   const { login, register } = useAuth();
   const [mode, setMode] = useState('login');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [serverError, setServerError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  function validate() {
+    const newErrors = {};
+    if (mode === 'register' && !name.trim()) {
+      newErrors.name = 'Informe seu nome.';
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      newErrors.email = 'Informe um e-mail válido.';
+    }
+    if (mode === 'register' && password.length < 6) {
+      newErrors.password = 'A senha deve ter pelo menos 6 caracteres.';
+    }
+    setFieldErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+
+  function handleModeChange(newMode) {
+    setMode(newMode);
+    setFieldErrors({});
+    setServerError('');
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError('');
+    setServerError('');
+    if (!validate()) return;
+
     setSubmitting(true);
     try {
       if (mode === 'login') {
@@ -22,7 +61,7 @@ export default function LoginPage() {
         await register(name, email, password);
       }
     } catch (err) {
-      setError(err.message);
+      setServerError(translateServerError(err.message));
     } finally {
       setSubmitting(false);
     }
@@ -43,7 +82,7 @@ export default function LoginPage() {
         <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden mb-5">
           <button
             type="button"
-            onClick={() => setMode('login')}
+            onClick={() => handleModeChange('login')}
             className={`flex-1 text-sm font-medium py-1.5 transition-colors ${
               mode === 'login'
                 ? 'bg-primary-600 text-white'
@@ -54,7 +93,7 @@ export default function LoginPage() {
           </button>
           <button
             type="button"
-            onClick={() => setMode('register')}
+            onClick={() => handleModeChange('register')}
             className={`flex-1 text-sm font-medium py-1.5 transition-colors ${
               mode === 'register'
                 ? 'bg-primary-600 text-white'
@@ -75,9 +114,13 @@ export default function LoginPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
+                  fieldErrors.name ? 'border-expense-500' : 'border-slate-200 dark:border-slate-700'
+                }`}
               />
+              {fieldErrors.name && (
+                <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{fieldErrors.name}</p>
+              )}
             </div>
           )}
 
@@ -86,12 +129,17 @@ export default function LoginPage() {
               E-mail
             </label>
             <input
-              type="email"
+              type="text"
+              inputMode="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+              className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
+                fieldErrors.email ? 'border-expense-500' : 'border-slate-200 dark:border-slate-700'
+              }`}
             />
+            {fieldErrors.email && (
+              <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{fieldErrors.email}</p>
+            )}
           </div>
 
           <div>
@@ -102,13 +150,20 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={mode === 'register' ? 6 : undefined}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+              className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
+                fieldErrors.password ? 'border-expense-500' : 'border-slate-200 dark:border-slate-700'
+              }`}
             />
+            {fieldErrors.password && (
+              <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{fieldErrors.password}</p>
+            )}
           </div>
 
-          {error && <p className="text-sm text-expense-600 dark:text-expense-400">{error}</p>}
+          {serverError && (
+            <p className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
+              {serverError}
+            </p>
+          )}
 
           <button
             type="submit"
