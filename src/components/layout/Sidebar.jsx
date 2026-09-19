@@ -97,7 +97,7 @@ export default function Sidebar({ open, onClose, theme, onToggleTheme, user, onL
             <button
               onClick={onLogout}
               title="Sair"
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded-lg shrink-0"
+              className="p-2 text-slate-400 hover:text-expense-600 dark:hover:text-expense-400 hover:bg-expense-50 dark:hover:bg-expense-500/10 active:scale-95 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-expense-500/40 rounded-lg shrink-0"
             >
               <LogOut size={16} />
             </button>
