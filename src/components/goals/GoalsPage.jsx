@@ -51,11 +51,11 @@ export default function GoalsPage() {
   }, [goals, filters]);
 
   function handleCreateSubmit(data) {
-    addGoal(data);
+    return addGoal(data);
   }
 
   function handleEditSubmit(data) {
-    updateGoal(editingGoal.id, data);
+    return updateGoal(editingGoal.id, data);
   }
 
   return (

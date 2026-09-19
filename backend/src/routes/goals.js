@@ -3,6 +3,11 @@ import { prisma, findOwned } from '../lib/prisma.js';
 
 const router = Router();
 
+function parseValidDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 router.post('/', async (req, res) => {
   const { title, description, category, icon, targetAmount, currentAmount, deadline } = req.body;
 
@@ -23,6 +28,11 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'currentAmount must be a non-negative number' });
   }
 
+  const parsedDeadline = parseValidDate(deadline);
+  if (!parsedDeadline) {
+    return res.status(400).json({ error: 'invalid deadline' });
+  }
+
   const goal = await prisma.goal.create({
     data: {
       title,
@@ -31,7 +41,7 @@ router.post('/', async (req, res) => {
       icon,
       targetAmount,
       currentAmount: currentAmount ?? 0,
-      deadline: new Date(deadline),
+      deadline: parsedDeadline,
       userId: req.userId,
     },
   });
@@ -77,6 +87,18 @@ router.put('/:id', async (req, res) => {
 
   const { title, description, category, icon, targetAmount, currentAmount, deadline } = req.body;
 
+  if (title !== undefined && !title) {
+    return res.status(400).json({ error: 'title cannot be empty' });
+  }
+
+  if (category !== undefined && !category) {
+    return res.status(400).json({ error: 'category cannot be empty' });
+  }
+
+  if (icon !== undefined && !icon) {
+    return res.status(400).json({ error: 'icon cannot be empty' });
+  }
+
   if (
     targetAmount !== undefined &&
     (typeof targetAmount !== 'number' || !Number.isFinite(targetAmount) || targetAmount <= 0)
@@ -91,6 +113,14 @@ router.put('/:id', async (req, res) => {
     return res.status(400).json({ error: 'currentAmount must be a non-negative number' });
   }
 
+  let parsedDeadline;
+  if (deadline !== undefined) {
+    parsedDeadline = parseValidDate(deadline);
+    if (!parsedDeadline) {
+      return res.status(400).json({ error: 'invalid deadline' });
+    }
+  }
+
   const goal = await prisma.goal.update({
     where: { id: existing.id },
     data: {
@@ -100,8 +130,61 @@ router.put('/:id', async (req, res) => {
       ...(icon !== undefined && { icon }),
       ...(targetAmount !== undefined && { targetAmount }),
       ...(currentAmount !== undefined && { currentAmount }),
-      ...(deadline !== undefined && { deadline: new Date(deadline) }),
+      ...(parsedDeadline !== undefined && { deadline: parsedDeadline }),
     },
+  });
+
+  res.json(goal);
+});
+
+// Atomic deposit/withdraw: the amount is computed from the database's
+// current value inside this same request, not from client-held state, so
+// two rapid clicks (or two tabs) can no longer overwrite each other based
+// on a stale savedAmount read on the client.
+router.post('/:id/deposit', async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid goal id' });
+  }
+
+  const { amount } = req.body;
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
+    return res.status(400).json({ error: 'amount must be a positive number' });
+  }
+
+  const existing = await findOwned(prisma.goal, id, req.userId);
+  if (!existing) {
+    return res.status(404).json({ error: 'goal not found' });
+  }
+
+  const goal = await prisma.goal.update({
+    where: { id: existing.id },
+    data: { currentAmount: { increment: amount } },
+  });
+
+  res.json(goal);
+});
+
+router.post('/:id/withdraw', async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: 'invalid goal id' });
+  }
+
+  const { amount } = req.body;
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
+    return res.status(400).json({ error: 'amount must be a positive number' });
+  }
+
+  const existing = await findOwned(prisma.goal, id, req.userId);
+  if (!existing) {
+    return res.status(404).json({ error: 'goal not found' });
+  }
+
+  const newAmount = Math.max(0, Number(existing.currentAmount) - amount);
+  const goal = await prisma.goal.update({
+    where: { id: existing.id },
+    data: { currentAmount: newAmount },
   });
 
   res.json(goal);

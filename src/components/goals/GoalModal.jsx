@@ -16,6 +16,8 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
   const [category, setCategory] = useState(goal?.category ?? GOAL_CATEGORIES[0]);
   const [icon, setIcon] = useState(goal?.icon ?? GOAL_ICON_KEYS[0]);
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   function validate() {
     const newErrors = {};
@@ -39,11 +41,13 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
     return Object.keys(newErrors).length === 0;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!validate()) return;
 
-    onSubmit({
+    setSubmitError('');
+    setSubmitting(true);
+    const success = await onSubmit({
       name: name.trim(),
       description: description.trim(),
       targetAmount,
@@ -52,7 +56,13 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
       category,
       icon,
     });
-    onClose();
+    setSubmitting(false);
+
+    if (success) {
+      onClose();
+    } else {
+      setSubmitError('Não foi possível salvar a meta. Tente novamente.');
+    }
   }
 
   return (
@@ -159,6 +169,12 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
           </div>
         </div>
 
+        {submitError && (
+          <p className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
+            {submitError}
+          </p>
+        )}
+
         <div className="flex gap-3 pt-2 pb-1">
           <button
             type="button"
@@ -169,7 +185,8 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium py-2.5 shadow-sm transition-colors active:scale-[0.98]"
+            disabled={submitting}
+            className="flex-1 rounded-xl bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white text-sm font-medium py-2.5 shadow-sm transition-colors active:scale-[0.98]"
           >
             {isEdit ? 'Salvar alterações' : 'Criar meta'}
           </button>

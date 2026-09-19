@@ -35,7 +35,9 @@ export default function LoginPage() {
     if (!EMAIL_REGEX.test(email)) {
       newErrors.email = 'Informe um e-mail válido.';
     }
-    if (mode === 'register' && password.length < 6) {
+    if (!password) {
+      newErrors.password = 'Informe sua senha.';
+    } else if (mode === 'register' && password.length < 6) {
       newErrors.password = 'A senha deve ter pelo menos 6 caracteres.';
     }
     setFieldErrors(newErrors);

@@ -21,6 +21,8 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
   const [category, setCategory] = useState(transaction?.category ?? '');
   const [date, setDate] = useState(transaction?.date ?? todayISO());
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const { categories: customCategories } = useCategories();
   const staticCategories = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
@@ -50,18 +52,26 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
     return Object.keys(newErrors).length === 0;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!validate()) return;
 
-    onSubmit({
+    setSubmitError('');
+    setSubmitting(true);
+    const success = await onSubmit({
       type,
       description: description.trim(),
       amount,
       category,
       date,
     });
-    onClose();
+    setSubmitting(false);
+
+    if (success) {
+      onClose();
+    } else {
+      setSubmitError('Não foi possível salvar a transação. Tente novamente.');
+    }
   }
 
   return (
@@ -158,6 +168,12 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
           {errors.date && <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.date}</p>}
         </div>
 
+        {submitError && (
+          <p className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
+            {submitError}
+          </p>
+        )}
+
         {/* Botões */}
         <div className="flex gap-3 pt-2 pb-1">
           <button
@@ -169,7 +185,8 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium py-2.5 shadow-sm transition-colors active:scale-[0.98]"
+            disabled={submitting}
+            className="flex-1 rounded-xl bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white text-sm font-medium py-2.5 shadow-sm transition-colors active:scale-[0.98]"
           >
             {isEdit ? 'Salvar alterações' : 'Adicionar transação'}
           </button>

@@ -13,6 +13,7 @@ export default function MoneyModal({ goal, mode, onClose, onConfirm }) {
   const { currency } = useCurrency();
   const [amount, setAmount] = useState(0);
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const { title, submit } = MODE_LABELS[mode];
 
   function validate() {
@@ -28,11 +29,19 @@ export default function MoneyModal({ goal, mode, onClose, onConfirm }) {
     return true;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!validate()) return;
-    onConfirm(amount);
-    onClose();
+
+    setSubmitting(true);
+    const success = await onConfirm(amount);
+    setSubmitting(false);
+
+    if (success) {
+      onClose();
+    } else {
+      setError('Não foi possível concluir a operação. Tente novamente.');
+    }
   }
 
   return (
@@ -66,7 +75,8 @@ export default function MoneyModal({ goal, mode, onClose, onConfirm }) {
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium py-2.5 shadow-sm transition-colors active:scale-[0.98]"
+            disabled={submitting}
+            className="flex-1 rounded-xl bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white text-sm font-medium py-2.5 shadow-sm transition-colors active:scale-[0.98]"
           >
             {submit}
           </button>

@@ -29,7 +29,7 @@ function toApi(goal) {
 }
 
 export function useGoals() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [goals, setGoals] = useState([]);
 
   useEffect(() => {
@@ -40,7 +40,10 @@ export function useGoals() {
 
     apiRequest('/goals', { token })
       .then((data) => setGoals(data.map(fromApi)))
-      .catch((err) => console.error('Não foi possível carregar as metas:', err));
+      .catch((err) => {
+        if (err.status === 401) logout();
+        console.error('Não foi possível carregar as metas:', err);
+      });
   }, [token]);
 
   async function addGoal(goal) {
@@ -51,8 +54,11 @@ export function useGoals() {
         body: toApi(goal),
       });
       setGoals((prev) => [fromApi(created), ...prev]);
+      return true;
     } catch (err) {
+      if (err.status === 401) logout();
       console.error('Não foi possível criar a meta:', err);
+      return false;
     }
   }
 
@@ -64,8 +70,11 @@ export function useGoals() {
         body: toApi(patch),
       });
       setGoals((prev) => prev.map((g) => (g.id === id ? fromApi(updated) : g)));
+      return true;
     } catch (err) {
+      if (err.status === 401) logout();
       console.error('Não foi possível atualizar a meta:', err);
+      return false;
     }
   }
 
@@ -73,21 +82,47 @@ export function useGoals() {
     try {
       await apiRequest(`/goals/${id}`, { method: 'DELETE', token });
       setGoals((prev) => prev.filter((g) => g.id !== id));
+      return true;
     } catch (err) {
+      if (err.status === 401) logout();
       console.error('Não foi possível excluir a meta:', err);
+      return false;
     }
   }
 
+  // Deposits/withdrawals hit dedicated backend endpoints that compute the new
+  // amount from the database's current value inside that same request,
+  // instead of adding a delta to this hook's (possibly stale) local state.
   async function addMoney(id, amount) {
-    const goal = goals.find((g) => g.id === id);
-    if (!goal) return;
-    await updateGoal(id, { savedAmount: goal.savedAmount + amount });
+    try {
+      const updated = await apiRequest(`/goals/${id}/deposit`, {
+        method: 'POST',
+        token,
+        body: { amount },
+      });
+      setGoals((prev) => prev.map((g) => (g.id === id ? fromApi(updated) : g)));
+      return true;
+    } catch (err) {
+      if (err.status === 401) logout();
+      console.error('Não foi possível adicionar o valor à meta:', err);
+      return false;
+    }
   }
 
   async function withdrawMoney(id, amount) {
-    const goal = goals.find((g) => g.id === id);
-    if (!goal) return;
-    await updateGoal(id, { savedAmount: Math.max(0, goal.savedAmount - amount) });
+    try {
+      const updated = await apiRequest(`/goals/${id}/withdraw`, {
+        method: 'POST',
+        token,
+        body: { amount },
+      });
+      setGoals((prev) => prev.map((g) => (g.id === id ? fromApi(updated) : g)));
+      return true;
+    } catch (err) {
+      if (err.status === 401) logout();
+      console.error('Não foi possível retirar o valor da meta:', err);
+      return false;
+    }
   }
 
   return { goals, addGoal, updateGoal, deleteGoal, addMoney, withdrawMoney };

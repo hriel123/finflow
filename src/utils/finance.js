@@ -26,10 +26,13 @@ function endOfDay(date) {
 export function getPeriodRange(period, customRange) {
   const now = new Date();
 
-  if (period === 'custom' && customRange?.start && customRange?.end) {
+  // A custom range with only one of the two dates filled in still applies
+  // that bound instead of silently falling back to "this month" below, which
+  // would otherwise look like the picked date was ignored.
+  if (period === 'custom' && (customRange?.start || customRange?.end)) {
     return {
-      start: startOfDay(parseLocalDate(customRange.start)),
-      end: endOfDay(parseLocalDate(customRange.end)),
+      start: customRange?.start ? startOfDay(parseLocalDate(customRange.start)) : new Date(0),
+      end: customRange?.end ? endOfDay(parseLocalDate(customRange.end)) : endOfDay(now),
     };
   }
 

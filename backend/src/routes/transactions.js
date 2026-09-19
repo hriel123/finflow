@@ -3,6 +3,11 @@ import { prisma, findOwned } from '../lib/prisma.js';
 
 const router = Router();
 
+function parseValidDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 router.post('/', async (req, res) => {
   const { description, category, type, amount, date } = req.body;
 
@@ -20,13 +25,18 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'amount must be a positive number' });
   }
 
+  const parsedDate = parseValidDate(date);
+  if (!parsedDate) {
+    return res.status(400).json({ error: 'invalid date' });
+  }
+
   const transaction = await prisma.transaction.create({
     data: {
       description,
       category,
       type,
       amount,
-      date: new Date(date),
+      date: parsedDate,
       userId: req.userId,
     },
   });
@@ -72,6 +82,14 @@ router.put('/:id', async (req, res) => {
 
   const { description, category, type, amount, date } = req.body;
 
+  if (description !== undefined && !description) {
+    return res.status(400).json({ error: 'description cannot be empty' });
+  }
+
+  if (category !== undefined && !category) {
+    return res.status(400).json({ error: 'category cannot be empty' });
+  }
+
   if (type !== undefined && type !== 'income' && type !== 'expense') {
     return res.status(400).json({ error: 'type must be "income" or "expense"' });
   }
@@ -83,6 +101,14 @@ router.put('/:id', async (req, res) => {
     return res.status(400).json({ error: 'amount must be a positive number' });
   }
 
+  let parsedDate;
+  if (date !== undefined) {
+    parsedDate = parseValidDate(date);
+    if (!parsedDate) {
+      return res.status(400).json({ error: 'invalid date' });
+    }
+  }
+
   const transaction = await prisma.transaction.update({
     where: { id: existing.id },
     data: {
@@ -90,7 +116,7 @@ router.put('/:id', async (req, res) => {
       ...(category !== undefined && { category }),
       ...(type !== undefined && { type }),
       ...(amount !== undefined && { amount }),
-      ...(date !== undefined && { date: new Date(date) }),
+      ...(parsedDate !== undefined && { date: parsedDate }),
     },
   });
 
