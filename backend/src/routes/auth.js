@@ -24,6 +24,10 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ error: 'invalid email format' });
   }
 
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'password must be at least 6 characters long' });
+  }
+
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     return res.status(409).json({ error: 'email already registered' });
