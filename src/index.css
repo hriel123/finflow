@@ -5,6 +5,13 @@
 @layer base {
   html {
     @apply antialiased;
+    /* Not `dark:bg-slate-950` here: Tailwind's dark variant compiles to a
+       `.dark .util` descendant selector, but `.dark` is toggled on this same
+       <html> element (see useTheme.js), so it would never match itself. */
+    background-color: #f8fafc; /* slate-50 */
+  }
+  html.dark {
+    background-color: #020617; /* slate-950 */
   }
   body {
     @apply font-sans text-slate-900;
