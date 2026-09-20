@@ -20,12 +20,12 @@ export default function SettingsPage({ theme, onToggleTheme }) {
         <p className="text-sm text-slate-400">Gerencie seu perfil, categorias e preferências.</p>
       </div>
 
-      <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex gap-1 sm:gap-2 overflow-x-auto border-b border-slate-200 dark:border-slate-800">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={`flex items-center gap-2 px-3.5 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+            className={`flex items-center gap-2 px-2.5 sm:px-3.5 py-2.5 text-sm font-medium border-b-2 -mb-px shrink-0 whitespace-nowrap transition-colors ${
               activeTab === key
                 ? 'border-primary-600 text-primary-600 dark:text-primary-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'

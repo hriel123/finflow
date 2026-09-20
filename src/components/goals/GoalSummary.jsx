@@ -38,17 +38,17 @@ export default function GoalSummary({ goals }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {tiles.map(({ label, value, icon: Icon, badge }) => (
         <div
           key={label}
-          className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 flex items-start justify-between"
+          className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 flex items-start justify-between gap-3"
         >
-          <div>
+          <div className="min-w-0">
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">{label}</p>
-            <p className="text-2xl font-semibold money text-slate-900 dark:text-slate-100">{value}</p>
+            <p className="text-2xl font-semibold money text-slate-900 dark:text-slate-100 truncate">{value}</p>
           </div>
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${badge}`}>
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${badge}`}>
             <Icon size={20} />
           </div>
         </div>
