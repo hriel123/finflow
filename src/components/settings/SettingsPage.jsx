@@ -25,13 +25,13 @@ export default function SettingsPage({ theme, onToggleTheme }) {
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={`flex items-center gap-2 px-2.5 sm:px-3.5 py-2.5 text-sm font-medium border-b-2 -mb-px shrink-0 whitespace-nowrap transition-colors ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2.5 text-xs sm:text-sm font-medium border-b-2 -mb-px shrink-0 whitespace-nowrap transition-colors ${
               activeTab === key
                 ? 'border-primary-600 text-primary-600 dark:text-primary-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
-            <Icon size={16} />
+            <Icon size={16} className="hidden sm:block" />
             {label}
           </button>
         ))}
