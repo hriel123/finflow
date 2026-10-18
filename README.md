@@ -22,12 +22,14 @@ FinFlow é uma aplicação web de controle financeiro pessoal: dashboard de rece
 
 ## Funcionalidades
 
-- Autenticação (registro e login) com JWT
+- Autenticação (registro e login) com JWT, com recuperação de senha por e-mail (link de 30 minutos, uso único)
+- Modo demonstração: "Experimentar sem conta" abre o app com dados de exemplo salvos só no navegador
 - Dashboard com saldo, receitas, despesas e gráficos por período/categoria
 - CRUD completo de transações, com filtros, busca e paginação
 - Metas financeiras com acompanhamento de progresso
 - Relatórios com evolução mensal, médias, maior despesa e taxa de economia
 - Configurações de perfil, categorias personalizadas e preferências (tema e moeda)
+- [Política de privacidade](https://finflow-omega-five.vercel.app/privacidade.html) (LGPD), com link no cadastro
 
 ## Estrutura do projeto
 
@@ -96,6 +98,9 @@ A aplicação sobe em `http://localhost:5173` (ou na próxima porta livre, caso 
 | `DATABASE_URL` | String de conexão do PostgreSQL (Prisma)      |
 | `PORT`         | Porta da API (padrão `3001`)                  |
 | `JWT_SECRET`   | Segredo usado para assinar os tokens JWT      |
+| `BREVO_API_KEY` | Chave da API do Brevo para o e-mail de recuperação de senha (opcional) |
+| `MAIL_FROM`    | Remetente verificado no Brevo (opcional)      |
+| `APP_URL`      | Endereço do site, usado no link do e-mail     |
 
 ## Scripts disponíveis
 
@@ -130,6 +135,8 @@ Stack sem custo, pensada para compartilhar um link público:
    - `DATABASE_URL` → a connection string do Neon
    - `JWT_SECRET` → uma string aleatória longa
    - `PORT` → o Render define automaticamente; não é necessário configurar
+   - `APP_URL` → a URL do front-end na Vercel
+   - `BREVO_API_KEY` e `MAIL_FROM` → para o "Esqueci minha senha" (veja abaixo). Sem elas, o app avisa que a recuperação por e-mail não está ativa
 6. Após o deploy, copie a URL pública gerada (ex: `https://finflow-backend.onrender.com`).
 
 ### 3. Front-end (Vercel)
@@ -137,3 +144,11 @@ Stack sem custo, pensada para compartilhar um link público:
 2. **Root Directory:** raiz do projeto (onde está este README)
 3. Variável de ambiente: `VITE_API_URL` → a URL do back-end no Render (passo anterior)
 4. Deploy. A URL pública gerada pelo Vercel é o link para compartilhar.
+
+### 4. E-mail de recuperação de senha (Brevo)
+O plano gratuito do Render bloqueia o envio de e-mail por SMTP, então a API envia pela API HTTPS do [Brevo](https://www.brevo.com) (gratuito, 300 e-mails por dia).
+1. No Brevo, em **Senders, Domains & Dedicated IPs** > **Senders**, cadastre e confirme o remetente.
+2. Em **SMTP & API** > **API Keys**, gere uma chave restrita com **Transactional email: All**.
+3. No Render, crie `BREVO_API_KEY` (a chave) e `MAIL_FROM` (o e-mail do remetente).
+
+A chave do Brevo expira depois de 90 dias sem uso; se o e-mail parar de chegar, gere outra e troque no Render.

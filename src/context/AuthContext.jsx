@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { apiRequest } from '../lib/api.js';
+import { DEMO_TOKEN, clearDemo } from '../lib/demo.js';
 
 const STORAGE_KEY = 'finflow_token';
 
@@ -67,8 +68,30 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    if (token === DEMO_TOKEN) clearDemo();
     persistToken(null);
     setUser(null);
+  }
+
+  // Entra sem conta, com dados de exemplo guardados só neste navegador.
+  async function startDemo() {
+    const demoUser = await apiRequest('/auth/me', { token: DEMO_TOKEN });
+    persistToken(DEMO_TOKEN);
+    setUser(demoUser);
+  }
+
+  async function requestPasswordReset(email) {
+    await apiRequest('/auth/forgot', { method: 'POST', body: { email } });
+  }
+
+  async function resetPassword(resetToken, password) {
+    const { token: newToken } = await apiRequest('/auth/reset', {
+      method: 'POST',
+      body: { token: resetToken, password },
+    });
+    const loggedUser = await apiRequest('/auth/me', { token: newToken });
+    persistToken(newToken);
+    setUser(loggedUser);
   }
 
   async function updateProfile(name, email) {
@@ -81,7 +104,21 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ token, user, loading, login, register, logout, updateProfile }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        loading,
+        isDemo: token === DEMO_TOKEN,
+        login,
+        register,
+        logout,
+        updateProfile,
+        startDemo,
+        requestPasswordReset,
+        resetPassword,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

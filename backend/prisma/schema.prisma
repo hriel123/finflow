@@ -21,7 +21,8 @@ model User {
   createdAt    DateTime      @default(now())
   transactions Transaction[]
   goals        Goal[]
-  categories   Category[]
+  categories     Category[]
+  passwordResets PasswordReset[]
 }
 
 model Transaction {
@@ -59,4 +60,16 @@ model Category {
   user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, name, type])
+}
+
+model PasswordReset {
+  id        Int       @id @default(autoincrement())
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
