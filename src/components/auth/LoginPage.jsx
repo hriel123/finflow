@@ -194,7 +194,7 @@ export default function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     aria-label={showPassword ? 'Ocultar a senha' : 'Mostrar a senha'}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
                   >
                     {showPassword ? 'Ocultar' : 'Mostrar'}
                   </button>
@@ -211,7 +211,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => handleModeChange('forgot')}
-                  className="text-xs font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                  className="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
                 >
                   Esqueci minha senha
                 </button>
@@ -241,7 +241,7 @@ export default function LoginPage() {
             {mode === 'register' && (
               <p className="text-xs text-center text-slate-400">
                 Ao criar a conta, você concorda com a{' '}
-                <a href="/privacidade.html" target="_blank" rel="noopener" className="text-primary-600 dark:text-primary-500 underline">
+                <a href="/privacidade.html" target="_blank" rel="noopener" className="text-primary-600 dark:text-primary-400 underline">
                   política de privacidade
                 </a>
                 .
@@ -256,7 +256,7 @@ export default function LoginPage() {
                     if (mode === 'reset') window.history.replaceState(null, '', '/');
                     handleModeChange('login');
                   }}
-                  className="text-sm font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                  className="text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline"
                 >
                   Voltar para entrar
                 </button>
