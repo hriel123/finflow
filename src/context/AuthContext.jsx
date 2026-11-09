@@ -17,10 +17,13 @@ export function AuthProvider({ children }) {
   });
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sessionError, setSessionError] = useState(false);
+  const [sessionAttempt, setSessionAttempt] = useState(0);
 
   useEffect(() => {
     if (!token) {
       setUser(null);
+      setSessionError(false);
       setLoading(false);
       return;
     }
@@ -34,10 +37,18 @@ export function AuthProvider({ children }) {
         if (err.status === 401) {
           persistToken(null);
           setUser(null);
+        } else {
+          setSessionError(true);
         }
       })
       .finally(() => setLoading(false));
-  }, [token]);
+  }, [token, sessionAttempt]);
+
+  function retrySession() {
+    setSessionError(false);
+    setLoading(true);
+    setSessionAttempt((n) => n + 1);
+  }
 
   function persistToken(newToken) {
     setToken(newToken);
@@ -109,6 +120,8 @@ export function AuthProvider({ children }) {
         token,
         user,
         loading,
+        sessionError,
+        retrySession,
         isDemo: token === DEMO_TOKEN,
         login,
         register,
