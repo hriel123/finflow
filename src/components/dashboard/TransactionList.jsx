@@ -2,7 +2,7 @@ import { ArrowUpRight, ArrowDownRight, Trash2, Inbox } from 'lucide-react';
 import { formatCurrency, formatDateBR } from '../../utils/format.js';
 import { useCurrency } from '../../hooks/useCurrency.js';
 
-export default function TransactionList({ transactions, onDelete }) {
+export default function TransactionList({ transactions, onDelete, emptyText = 'Nenhuma transação ainda.' }) {
   const { currency } = useCurrency();
 
   return (
@@ -15,7 +15,7 @@ export default function TransactionList({ transactions, onDelete }) {
       {transactions.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-12 px-5 text-center">
           <Inbox size={24} className="text-slate-300 dark:text-slate-600" />
-          <p className="text-sm text-slate-400">Nenhuma transação ainda.</p>
+          <p className="text-sm text-slate-400">{emptyText}</p>
         </div>
       ) : (
         <ul className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[420px] overflow-y-auto">

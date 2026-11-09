@@ -81,6 +81,17 @@ export default function Dashboard({ theme }) {
 
   const topCategory = useMemo(() => getTopCategory(filteredTransactions), [filteredTransactions]);
 
+  let listEmptyText;
+  if (transactions.length > 0) {
+    listEmptyText =
+      periodTransactions.length === 0
+        ? 'Nenhuma transação no período selecionado.'
+        : 'Nenhuma transação encontrada com esses filtros.';
+  }
+  const chartEmptyText = transactions.some((t) => t.type === 'expense')
+    ? 'Nenhuma despesa no período selecionado.'
+    : undefined;
+
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl mx-auto">
       <div className="flex justify-end">
@@ -104,10 +115,10 @@ export default function Dashboard({ theme }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
           <IncomeExpenseChart data={monthlyData} theme={theme} />
-          <ExpenseByCategoryChart data={categoryData} theme={theme} />
+          <ExpenseByCategoryChart data={categoryData} theme={theme} emptyText={chartEmptyText} />
         </div>
         <div className="lg:col-span-1">
-          <TransactionList transactions={filteredTransactions} onDelete={deleteTransaction} />
+          <TransactionList transactions={filteredTransactions} onDelete={deleteTransaction} emptyText={listEmptyText} />
         </div>
       </div>
 

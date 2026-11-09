@@ -19,7 +19,7 @@ function renderActiveShape(props) {
   return <Sector {...props} outerRadius={props.outerRadius + 6} />;
 }
 
-export default function ExpenseByCategoryChart({ data, theme }) {
+export default function ExpenseByCategoryChart({ data, theme, emptyText = 'Você ainda não possui despesas cadastradas.' }) {
   const { currency } = useCurrency();
   const isDark = theme === 'dark';
   const [activeIndex, setActiveIndex] = useState(undefined);
@@ -34,7 +34,7 @@ export default function ExpenseByCategoryChart({ data, theme }) {
       {data.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center">
           <PieChartIcon size={24} className="text-slate-300 dark:text-slate-600" />
-          <p className="text-sm text-slate-400">Você ainda não possui despesas cadastradas.</p>
+          <p className="text-sm text-slate-400">{emptyText}</p>
         </div>
       ) : (
         <div className="flex-1 flex flex-col sm:flex-row items-center gap-4 min-h-0">

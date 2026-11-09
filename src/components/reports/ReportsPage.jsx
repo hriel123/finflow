@@ -70,7 +70,11 @@ export default function ReportsPage({ theme }) {
           <MonthlyTrendChart data={monthlyData} theme={theme} />
         </div>
         <div className="lg:col-span-1">
-          <ExpenseByCategoryChart data={categoryData} theme={theme} />
+          <ExpenseByCategoryChart
+            data={categoryData}
+            theme={theme}
+            emptyText={transactions.some((t) => t.type === 'expense') ? 'Nenhuma despesa no período selecionado.' : undefined}
+          />
         </div>
       </div>
     </div>
