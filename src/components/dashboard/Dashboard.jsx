@@ -7,6 +7,7 @@ import IncomeExpenseChart from './IncomeExpenseChart.jsx';
 import ExpenseByCategoryChart from './ExpenseByCategoryChart.jsx';
 import PeriodSummary from './PeriodSummary.jsx';
 import TransactionModal from './TransactionModal.jsx';
+import DeleteTransactionModal from '../transactions/DeleteTransactionModal.jsx';
 import { useTransactions } from '../../hooks/useTransactions.js';
 import {
   getPeriodRange,
@@ -27,6 +28,7 @@ export default function Dashboard({ theme }) {
   const { transactions, addTransaction, deleteTransaction } = useTransactions();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deletingTransaction, setDeletingTransaction] = useState(null);
 
   function handleFiltersChange(patch) {
     setFilters((prev) => ({ ...prev, ...patch }));
@@ -118,7 +120,7 @@ export default function Dashboard({ theme }) {
           <ExpenseByCategoryChart data={categoryData} theme={theme} emptyText={chartEmptyText} />
         </div>
         <div className="lg:col-span-1">
-          <TransactionList transactions={filteredTransactions} onDelete={deleteTransaction} emptyText={listEmptyText} />
+          <TransactionList transactions={filteredTransactions} onDelete={setDeletingTransaction} emptyText={listEmptyText} />
         </div>
       </div>
 
@@ -128,6 +130,14 @@ export default function Dashboard({ theme }) {
 
       {modalOpen && (
         <TransactionModal onClose={() => setModalOpen(false)} onSubmit={addTransaction} />
+      )}
+
+      {deletingTransaction && (
+        <DeleteTransactionModal
+          transaction={deletingTransaction}
+          onClose={() => setDeletingTransaction(null)}
+          onConfirm={() => deleteTransaction(deletingTransaction.id)}
+        />
       )}
     </div>
   );

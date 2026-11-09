@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Trash2, Tag } from 'lucide-react';
 import { useCategories } from '../../hooks/useCategories.js';
 import Select from '../common/Select.jsx';
+import DeleteCategoryModal from './DeleteCategoryModal.jsx';
 
 const TYPE_OPTIONS = [
   { value: 'expense', label: 'Despesa' },
@@ -12,6 +13,7 @@ export default function CategoriesTab() {
   const { categories, addCategory, deleteCategory, error } = useCategories();
   const [name, setName] = useState('');
   const [type, setType] = useState('expense');
+  const [deletingCategory, setDeletingCategory] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -63,7 +65,7 @@ export default function CategoriesTab() {
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">Despesas</p>
               <ul className="space-y-1.5">
                 {expenseCategories.map((c) => (
-                  <CategoryRow key={c.id} category={c} onDelete={deleteCategory} />
+                  <CategoryRow key={c.id} category={c} onDelete={setDeletingCategory} />
                 ))}
               </ul>
             </div>
@@ -73,12 +75,20 @@ export default function CategoriesTab() {
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">Receitas</p>
               <ul className="space-y-1.5">
                 {incomeCategories.map((c) => (
-                  <CategoryRow key={c.id} category={c} onDelete={deleteCategory} />
+                  <CategoryRow key={c.id} category={c} onDelete={setDeletingCategory} />
                 ))}
               </ul>
             </div>
           )}
         </div>
+      )}
+
+      {deletingCategory && (
+        <DeleteCategoryModal
+          category={deletingCategory}
+          onClose={() => setDeletingCategory(null)}
+          onConfirm={() => deleteCategory(deletingCategory.id)}
+        />
       )}
     </div>
   );
@@ -89,7 +99,7 @@ function CategoryRow({ category, onDelete }) {
     <li className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/60">
       <span className="text-sm text-slate-700 dark:text-slate-200 truncate">{category.name}</span>
       <button
-        onClick={() => onDelete(category.id)}
+        onClick={() => onDelete(category)}
         title="Excluir categoria"
         className="text-slate-400 hover:text-expense-600 dark:hover:text-expense-400 transition-colors shrink-0"
       >

@@ -56,7 +56,7 @@ export default function TransactionList({ transactions, onDelete, emptyText = 'N
                     {formatCurrency(t.amount, currency)}
                   </span>
                   <button
-                    onClick={() => onDelete(t.id)}
+                    onClick={() => onDelete(t)}
                     title="Excluir transação"
                     className="text-slate-300 dark:text-slate-600 hover:text-expense-600 dark:hover:text-expense-400 opacity-100 sm:[@media(hover:hover)]:opacity-0 sm:group-hover:opacity-100 transition-opacity focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded"
                   >
