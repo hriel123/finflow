@@ -38,7 +38,7 @@ export default function ReportsPage({ theme }) {
     [filteredTransactions]
   );
 
-  const monthsCount = monthlyData.length || 1;
+  const monthsCount = new Set(filteredTransactions.map((t) => t.date.slice(0, 7))).size || 1;
   const avgIncome = totalIncome / monthsCount;
   const avgExpense = totalExpense / monthsCount;
   const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;

@@ -27,7 +27,7 @@ export default function ReportSummaryCards({ avgIncome, avgExpense, biggestExpen
     },
     {
       label: 'Taxa de economia',
-      value: `${savingsRate.toFixed(1)}%`,
+      value: `${savingsRate.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`,
       icon: PiggyBank,
       badge: 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400',
     },
