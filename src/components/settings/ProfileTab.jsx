@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { translateServerError } from '../../lib/api.js';
 
 export default function ProfileTab() {
   const { user, updateProfile } = useAuth();
@@ -18,7 +19,7 @@ export default function ProfileTab() {
       await updateProfile(name.trim(), email.trim());
       setSuccess(true);
     } catch (err) {
-      setError(err.message);
+      setError(translateServerError(err.message));
     } finally {
       setSubmitting(false);
     }

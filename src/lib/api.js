@@ -2,6 +2,27 @@ import { DEMO_TOKEN, demoRequest } from './demo.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
+const SERVER_ERROR_MESSAGES = {
+  'invalid credentials': 'E-mail ou senha incorretos.',
+  'invalid email format': 'Informe um e-mail válido.',
+  'password must be at least 6 characters long': 'A senha deve ter pelo menos 6 caracteres.',
+  'name, email and password are required': 'Preencha nome, e-mail e senha.',
+  'email and password are required': 'Preencha e-mail e senha.',
+  'email already registered': 'Este e-mail já está cadastrado.',
+  'too many attempts, please try again later': 'Muitas tentativas. Espere alguns minutos e tente de novo.',
+  'email not configured': 'A recuperação de senha por e-mail ainda não foi ativada.',
+  'invalid or expired reset link': 'Este link expirou ou já foi usado. Peça um novo em "Esqueci minha senha".',
+  'token and password are required': 'Informe a nova senha.',
+  'category already exists': 'Essa categoria já existe.',
+  'Failed to fetch': 'Sem conexão com o servidor. Verifique a internet e tente de novo.',
+  'NetworkError when attempting to fetch resource.': 'Sem conexão com o servidor. Verifique a internet e tente de novo.',
+  'Load failed': 'Sem conexão com o servidor. Verifique a internet e tente de novo.',
+};
+
+export function translateServerError(message) {
+  return SERVER_ERROR_MESSAGES[message] ?? message;
+}
+
 // Render's free plan puts the API to sleep when idle and the first request can
 // take up to a minute. After 4 s waiting, ServerWakeNotice shows a notice.
 let pending = 0;

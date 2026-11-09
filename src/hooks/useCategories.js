@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiRequest } from '../lib/api.js';
+import { apiRequest, translateServerError } from '../lib/api.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export function useCategories() {
@@ -33,7 +33,7 @@ export function useCategories() {
       return true;
     } catch (err) {
       if (err.status === 401) logout();
-      setError(err.message);
+      setError(translateServerError(err.message));
       return false;
     }
   }

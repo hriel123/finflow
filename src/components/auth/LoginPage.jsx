@@ -1,29 +1,12 @@
 import { useState } from 'react';
 import { Wallet, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { translateServerError } from '../../lib/api.js';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const SERVER_ERROR_MESSAGES = {
-  'invalid credentials': 'E-mail ou senha incorretos.',
-  'invalid email format': 'Informe um e-mail válido.',
-  'password must be at least 6 characters long': 'A senha deve ter pelo menos 6 caracteres.',
-  'name, email and password are required': 'Preencha nome, e-mail e senha.',
-  'email and password are required': 'Preencha e-mail e senha.',
-  'email already registered': 'Este e-mail já está cadastrado.',
-  'too many attempts, please try again later': 'Muitas tentativas. Espere alguns minutos e tente de novo.',
-  'email not configured': 'A recuperação de senha por e-mail ainda não foi ativada.',
-  'invalid or expired reset link': 'Este link expirou ou já foi usado. Peça um novo em "Esqueci minha senha".',
-  'token and password are required': 'Informe a nova senha.',
-  'Failed to fetch': 'Sem conexão com o servidor. Verifique a internet e tente de novo.',
-};
-
 function readResetToken() {
   return new URLSearchParams(window.location.search).get('redefinir') || '';
-}
-
-function translateServerError(message) {
-  return SERVER_ERROR_MESSAGES[message] ?? message;
 }
 
 export default function LoginPage() {
