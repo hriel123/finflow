@@ -15,11 +15,6 @@ export default function SettingsPage({ theme, onToggleTheme }) {
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl mx-auto">
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Configurações</h1>
-        <p className="text-sm text-slate-400">Gerencie seu perfil, categorias e preferências.</p>
-      </div>
-
       <div className="flex gap-1 sm:gap-2 overflow-x-auto border-b border-slate-200 dark:border-slate-800">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button

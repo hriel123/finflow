@@ -51,11 +51,6 @@ export default function ReportsPage({ theme }) {
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl mx-auto">
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Relatórios</h1>
-        <p className="text-sm text-slate-400">Analise sua evolução financeira em detalhe.</p>
-      </div>
-
       <ReportsFilters filters={filters} onChange={handleFiltersChange} />
 
       <ReportSummaryCards
