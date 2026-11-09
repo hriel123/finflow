@@ -10,32 +10,29 @@ function isoDay(date) {
   return date.toISOString().slice(0, 10);
 }
 
-function daysAgo(n) {
-  const d = new Date();
-  d.setDate(d.getDate() - n);
-  return isoDay(d);
-}
-
 function monthsAhead(n) {
   const d = new Date();
   d.setMonth(d.getMonth() + n);
   return isoDay(d);
 }
 
-// Lançamentos dos últimos meses, com datas relativas a hoje para os
-// gráficos e relatórios sempre terem conteúdo.
+// Lançamentos do mês atual e dos três anteriores, para os gráficos e
+// relatórios sempre terem conteúdo. No mês atual os dias vão do dia 1 até
+// hoje, para o filtro padrão "Este mês" já mostrar receitas e despesas.
 function seed() {
   const now = new Date().toISOString();
+  const today = new Date();
   const tx = [];
   let id = 1;
   for (let m = 0; m < 4; m++) {
-    const base = m * 30;
-    const add = (description, category, type, amount, offset) =>
-      tx.push({ id: id++, description, category, type, amount: String(amount), date: `${daysAgo(base + offset)}T12:00:00.000Z`, createdAt: now });
-    add('Salário', 'Salário', 'income', 4800, 2);
-    add('Aluguel', 'Moradia', 'expense', 1350, 3);
-    add('Supermercado', 'Alimentação', 'expense', 420 + m * 35, 6);
-    add('Conta de luz', 'Moradia', 'expense', 138 + m * 9, 9);
+    const add = (description, category, type, amount, day) => {
+      const d = new Date(today.getFullYear(), today.getMonth() - m, m === 0 ? Math.ceil((day * today.getDate()) / 28) : day, 12);
+      tx.push({ id: id++, description, category, type, amount: String(amount), date: `${isoDay(d)}T12:00:00.000Z`, createdAt: now });
+    };
+    add('Salário', 'Salário', 'income', 4800, 1);
+    add('Aluguel', 'Moradia', 'expense', 1350, 2);
+    add('Supermercado', 'Alimentação', 'expense', 420 + m * 35, 5);
+    add('Conta de luz', 'Moradia', 'expense', 138 + m * 9, 8);
     add('Transporte por aplicativo', 'Transporte', 'expense', 96 + m * 12, 11);
     add('Restaurante', 'Alimentação', 'expense', 74 + m * 10, 14);
     add('Cinema', 'Entretenimento', 'expense', 58, 17);
