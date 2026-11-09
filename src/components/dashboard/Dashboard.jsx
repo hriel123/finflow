@@ -1,10 +1,8 @@
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { Wallet, TrendingUp, TrendingDown, Plus } from 'lucide-react';
 import SummaryCard from './SummaryCard.jsx';
 import TransactionList from './TransactionList.jsx';
 import FiltersBar from './FiltersBar.jsx';
-import IncomeExpenseChart from './IncomeExpenseChart.jsx';
-import ExpenseByCategoryChart from './ExpenseByCategoryChart.jsx';
 import PeriodSummary from './PeriodSummary.jsx';
 import TransactionModal from './TransactionModal.jsx';
 import DeleteTransactionModal from '../transactions/DeleteTransactionModal.jsx';
@@ -16,6 +14,13 @@ import {
   groupByCategory,
   getTopCategory,
 } from '../../utils/finance.js';
+
+const IncomeExpenseChart = lazy(() => import('./IncomeExpenseChart.jsx'));
+const ExpenseByCategoryChart = lazy(() => import('./ExpenseByCategoryChart.jsx'));
+
+const chartFallback = (
+  <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 h-80" />
+);
 
 const DEFAULT_FILTERS = {
   period: 'month',
@@ -116,8 +121,12 @@ export default function Dashboard({ theme }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <IncomeExpenseChart data={monthlyData} theme={theme} />
-          <ExpenseByCategoryChart data={categoryData} theme={theme} emptyText={chartEmptyText} />
+          <Suspense fallback={chartFallback}>
+            <IncomeExpenseChart data={monthlyData} theme={theme} />
+          </Suspense>
+          <Suspense fallback={chartFallback}>
+            <ExpenseByCategoryChart data={categoryData} theme={theme} emptyText={chartEmptyText} />
+          </Suspense>
         </div>
         <div className="lg:col-span-1">
           <TransactionList transactions={filteredTransactions} onDelete={setDeletingTransaction} emptyText={listEmptyText} />

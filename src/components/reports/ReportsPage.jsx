@@ -1,10 +1,13 @@
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import ReportsFilters from './ReportsFilters.jsx';
 import ReportSummaryCards from './ReportSummaryCards.jsx';
-import MonthlyTrendChart from './MonthlyTrendChart.jsx';
-import ExpenseByCategoryChart from '../dashboard/ExpenseByCategoryChart.jsx';
 import { useTransactions } from '../../hooks/useTransactions.js';
 import { getPeriodRange, filterTransactions, groupByMonth, groupByCategory } from '../../utils/finance.js';
+
+const MonthlyTrendChart = lazy(() => import('./MonthlyTrendChart.jsx'));
+const ExpenseByCategoryChart = lazy(() => import('../dashboard/ExpenseByCategoryChart.jsx'));
+
+const cardFallback = 'bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800';
 
 const DEFAULT_FILTERS = { period: 'year', customRange: null };
 
@@ -62,14 +65,18 @@ export default function ReportsPage({ theme }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <MonthlyTrendChart data={monthlyData} theme={theme} />
+          <Suspense fallback={<div className={`${cardFallback} h-96`} />}>
+            <MonthlyTrendChart data={monthlyData} theme={theme} />
+          </Suspense>
         </div>
         <div className="lg:col-span-1">
-          <ExpenseByCategoryChart
-            data={categoryData}
-            theme={theme}
-            emptyText={transactions.some((t) => t.type === 'expense') ? 'Nenhuma despesa no período selecionado.' : undefined}
-          />
+          <Suspense fallback={<div className={`${cardFallback} h-80`} />}>
+            <ExpenseByCategoryChart
+              data={categoryData}
+              theme={theme}
+              emptyText={transactions.some((t) => t.type === 'expense') ? 'Nenhuma despesa no período selecionado.' : undefined}
+            />
+          </Suspense>
         </div>
       </div>
     </div>
