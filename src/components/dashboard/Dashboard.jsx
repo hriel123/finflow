@@ -114,7 +114,7 @@ export default function Dashboard({ theme }) {
       <FiltersBar filters={filters} onChange={handleFiltersChange} />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <SummaryCard label="Saldo atual" value={balance} icon={Wallet} variant="default" />
+        <SummaryCard label="Saldo do período" value={balance} icon={Wallet} variant="default" />
         <SummaryCard label="Receitas" value={income} icon={TrendingUp} variant="income" />
         <SummaryCard label="Despesas" value={expense} icon={TrendingDown} variant="expense" />
       </div>

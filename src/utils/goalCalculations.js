@@ -32,7 +32,6 @@ export function getGoalStatus(goal) {
 
 export function formatDaysRemainingLabel(goal) {
   const status = getGoalStatus(goal);
-  if (status === 'completed') return '🎉 Meta concluída';
   if (status === 'overdue') return 'Prazo encerrado';
   const days = getDaysRemaining(goal);
   return `Faltam ${days} dia${days === 1 ? '' : 's'}`;

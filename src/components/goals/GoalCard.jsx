@@ -54,7 +54,7 @@ export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, on
               {goal.name}
             </h3>
             {goal.description && (
-              <p className="text-xs text-slate-400 truncate">{goal.description}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{goal.description}</p>
             )}
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, on
           <span className="font-semibold text-slate-900 dark:text-slate-100 money">
             {formatCurrency(goal.savedAmount, currency)}
           </span>
-          <span className="text-slate-400 money">{formatCurrency(goal.targetAmount, currency)}</span>
+          <span className="text-slate-500 dark:text-slate-400 money">{formatCurrency(goal.targetAmount, currency)}</span>
         </div>
         <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
           <div
@@ -83,13 +83,15 @@ export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, on
       </div>
 
       <div className="flex flex-col gap-1 text-xs text-slate-500 dark:text-slate-400">
-        <span className="flex items-center gap-1.5">
-          <TargetIcon size={13} />
-          {status === 'completed' ? 'Meta atingida' : `Faltam ${formatCurrency(remaining, currency)}`}
-        </span>
+        {status !== 'completed' && (
+          <span className="flex items-center gap-1.5">
+            <TargetIcon size={13} />
+            {`Faltam ${formatCurrency(remaining, currency)}`}
+          </span>
+        )}
         <span className="flex items-center gap-1.5">
           <Calendar size={13} />
-          {status === 'active' ? `Prazo: ${formatDateBR(goal.deadline)} · ${daysLabel}` : daysLabel}
+          {status === 'active' ? `Prazo: ${formatDateBR(goal.deadline)} · ${daysLabel}` : status === 'completed' ? `Prazo: ${formatDateBR(goal.deadline)}` : daysLabel}
         </span>
       </div>
 

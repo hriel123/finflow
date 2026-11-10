@@ -106,8 +106,8 @@ export default function Sidebar({ open, onClose, theme, onToggleTheme, user, onL
             className="w-full flex items-center justify-between gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
           >
             <span className="flex items-center gap-2">
-              {theme === 'dark' ? <Moon size={16} /> : <Sun size={16} />}
-              {theme === 'dark' ? 'Modo escuro' : 'Modo claro'}
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              {theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
             </span>
           </button>
           <div className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-3 flex items-center justify-between gap-2">
@@ -115,7 +115,7 @@ export default function Sidebar({ open, onClose, theme, onToggleTheme, user, onL
               <p className="text-xs font-medium text-slate-600 dark:text-slate-300 truncate">
                 {user?.name}
               </p>
-              <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email}</p>
             </div>
             <button
               onClick={onLogout}
