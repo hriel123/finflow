@@ -94,7 +94,7 @@ router.post('/login', authLimiter, async (req, res) => {
     return res.status(401).json({ error: 'invalid credentials' });
   }
 
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  const token = jwt.sign({ userId: user.id, tokenVersion: user.tokenVersion }, process.env.JWT_SECRET, { expiresIn: '1d' });
   res.json({ token });
 });
 
@@ -153,12 +153,15 @@ router.post('/reset', authLimiter, async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  await prisma.$transaction([
-    prisma.user.update({ where: { id: reset.userId }, data: { password: hashedPassword } }),
+  const [user] = await prisma.$transaction([
+    prisma.user.update({
+      where: { id: reset.userId },
+      data: { password: hashedPassword, tokenVersion: { increment: 1 } },
+    }),
     prisma.passwordReset.updateMany({ where: { userId: reset.userId, usedAt: null }, data: { usedAt: new Date() } }),
   ]);
 
-  const authToken = jwt.sign({ userId: reset.userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  const authToken = jwt.sign({ userId: user.id, tokenVersion: user.tokenVersion }, process.env.JWT_SECRET, { expiresIn: '1d' });
   res.json({ token: authToken });
 });
 
