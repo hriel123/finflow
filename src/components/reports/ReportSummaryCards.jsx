@@ -20,7 +20,7 @@ export default function ReportSummaryCards({ avgIncome, avgExpense, biggestExpen
     },
     {
       label: 'Maior despesa do período',
-      value: biggestExpense ? formatCurrency(biggestExpense.amount, currency) : '—',
+      value: formatCurrency(biggestExpense?.amount ?? 0, currency),
       sublabel: biggestExpense?.description,
       icon: ArrowDownCircle,
       badge: 'bg-expense-50 dark:bg-expense-500/10 text-expense-600 dark:text-expense-400',
@@ -38,12 +38,12 @@ export default function ReportSummaryCards({ avgIncome, avgExpense, biggestExpen
       {tiles.map(({ label, value, sublabel, icon: Icon, badge }) => (
         <div
           key={label}
-          className="card-hover-glow bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 flex items-start justify-between"
+          className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 flex items-start justify-between"
         >
           <div className="min-w-0">
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">{label}</p>
             <p className="text-2xl font-semibold money text-slate-900 dark:text-slate-100">{value}</p>
-            {sublabel && <p className="text-xs text-slate-400 truncate mt-0.5">{sublabel}</p>}
+            {sublabel && <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{sublabel}</p>}
           </div>
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${badge}`}>
             <Icon size={20} />

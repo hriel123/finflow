@@ -11,7 +11,7 @@ export default function PeriodSummary({ summary }) {
     { label: 'Saldo', value: formatCurrency(balance, currency), valueClass: 'text-slate-900 dark:text-slate-100' },
     {
       label: 'Maior gasto',
-      value: topCategory ? topCategory.category : '—',
+      value: topCategory ? topCategory.category : '-',
       valueClass: 'text-slate-900 dark:text-slate-100',
     },
     { label: 'Transações', value: String(count), valueClass: 'text-slate-900 dark:text-slate-100' },
