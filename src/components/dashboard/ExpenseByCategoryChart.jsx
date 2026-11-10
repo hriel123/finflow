@@ -26,7 +26,7 @@ export default function ExpenseByCategoryChart({ data, theme, emptyText = 'Você
   const total = data.reduce((sum, d) => sum + d.total, 0);
 
   return (
-    <div className="card-hover-glow bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 h-80 flex flex-col">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 h-80 flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Despesas por categoria</h2>
       </div>
@@ -34,11 +34,11 @@ export default function ExpenseByCategoryChart({ data, theme, emptyText = 'Você
       {data.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center">
           <PieChartIcon size={24} className="text-slate-300 dark:text-slate-600" />
-          <p className="text-sm text-slate-400">{emptyText}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{emptyText}</p>
         </div>
       ) : (
         <div className="flex-1 flex flex-col sm:flex-row items-center gap-4 min-h-0">
-          <div className="w-full sm:w-1/2 h-32 sm:h-full shrink-0">
+          <div className="w-full sm:w-2/5 h-32 sm:h-full shrink-0">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -81,7 +81,7 @@ export default function ExpenseByCategoryChart({ data, theme, emptyText = 'Você
                   />
                   <span className="truncate">{entry.category}</span>
                 </span>
-                <span className="text-slate-400 shrink-0">
+                <span className="text-slate-500 dark:text-slate-400 shrink-0">
                   {total ? Math.round((entry.total / total) * 100) : 0}%
                 </span>
               </li>

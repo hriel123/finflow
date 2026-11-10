@@ -11,6 +11,15 @@ export function formatCurrency(value, currency = 'BRL') {
   });
 }
 
+export function formatCurrencyCompact(value, currency = 'BRL') {
+  return (value ?? 0).toLocaleString(CURRENCY_LOCALES[currency] ?? 'pt-BR', {
+    style: 'currency',
+    currency,
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  });
+}
+
 export function formatDateBR(dateStr) {
   // Bare ISO date strings ('YYYY-MM-DD') parse as UTC midnight, which can
   // display a day early in negative-UTC-offset timezones. Forcing a local
