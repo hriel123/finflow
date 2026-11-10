@@ -31,7 +31,7 @@ export default function LoginPage() {
     if (mode === 'register' && !name.trim()) {
       newErrors.name = 'Informe seu nome.';
     }
-    if (mode !== 'reset' && !EMAIL_REGEX.test(email)) {
+    if (mode !== 'reset' && !EMAIL_REGEX.test(email.trim())) {
       newErrors.email = 'Informe um e-mail válido.';
     }
     if (mode !== 'forgot') {
@@ -63,13 +63,13 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       if (mode === 'login') {
-        await login(email, password);
+        await login(email.trim(), password);
         window.history.replaceState(null, '', window.location.pathname);
       } else if (mode === 'register') {
-        await register(name, email, password);
+        await register(name, email.trim(), password);
         window.history.replaceState(null, '', window.location.pathname);
       } else if (mode === 'forgot') {
-        await requestPasswordReset(email);
+        await requestPasswordReset(email.trim());
         setSent(true);
       } else {
         await resetPassword(resetToken, password);
@@ -167,7 +167,7 @@ export default function LoginPage() {
 
             {mode !== 'reset' &&
               field('email', 'E-mail', (
-                <input {...fieldProps('email')} type="text" inputMode="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass('email')} />
+                <input {...fieldProps('email')} type="text" inputMode="email" autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass('email')} />
               ))}
 
             {mode !== 'forgot' &&

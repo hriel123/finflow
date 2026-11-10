@@ -46,6 +46,9 @@ export default function ProfileTab() {
           <input
             id="profile-email"
             type="email"
+            autoComplete="email"
+            autoCapitalize="none"
+            spellCheck={false}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
