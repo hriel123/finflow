@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -21,6 +22,25 @@ const navItems = [
 ];
 
 export default function Sidebar({ open, onClose, theme, onToggleTheme, user, onLogout }) {
+  const asideRef = useRef(null);
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const previous = document.activeElement;
+    closeRef.current?.focus();
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      if (asideRef.current?.contains(document.activeElement) || document.activeElement === document.body) {
+        previous?.focus();
+      }
+    };
+  }, [open]);
+
   return (
     <>
       {/* Overlay no mobile */}
@@ -32,10 +52,11 @@ export default function Sidebar({ open, onClose, theme, onToggleTheme, user, onL
       )}
 
       <aside
+        ref={asideRef}
         className={`fixed z-40 inset-y-0 left-0 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800
-          flex flex-col transition-transform duration-200 ease-in-out
-          lg:static lg:translate-x-0
-          ${open ? 'translate-x-0' : '-translate-x-full'}`}
+          flex flex-col duration-200 ease-in-out
+          lg:static lg:translate-x-0 lg:visible
+          ${open ? 'translate-x-0 transition-transform' : '-translate-x-full invisible transition-[transform,visibility]'}`}
       >
         <div className="flex items-center justify-between px-6 h-16 border-b border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-2">
@@ -47,6 +68,7 @@ export default function Sidebar({ open, onClose, theme, onToggleTheme, user, onL
             </span>
           </div>
           <button
+            ref={closeRef}
             onClick={onClose}
             aria-label="Fechar menu"
             className="lg:hidden text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded-lg"

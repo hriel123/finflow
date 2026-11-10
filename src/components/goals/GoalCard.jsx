@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MoreVertical, CheckCircle2, Target as TargetIcon, Calendar } from 'lucide-react';
 import { GOAL_ICONS } from '../../data/goalIcons.js';
 import { GOAL_CATEGORY_COLORS } from '../../data/goalCategories.js';
@@ -14,6 +14,19 @@ import {
 export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, onDelete }) {
   const { currency } = useCurrency();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [menuOpen]);
 
   const Icon = GOAL_ICONS[goal.icon] ?? TargetIcon;
   const colors = GOAL_CATEGORY_COLORS[goal.category] ?? GOAL_CATEGORY_COLORS.Outros;
@@ -89,6 +102,7 @@ export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, on
         </button>
         <div className="relative">
           <button
+            ref={menuButtonRef}
             onClick={() => setMenuOpen((o) => !o)}
             aria-label={`Mais opções da meta ${goal.name}`}
             aria-expanded={menuOpen}
