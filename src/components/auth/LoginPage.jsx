@@ -118,16 +118,16 @@ export default function LoginPage() {
     }`;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">
+    <main className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">
       <div className="w-full max-w-sm">
         <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-6">
           <div className="flex items-center gap-2 mb-6">
             <div className="w-8 h-8 rounded-xl bg-primary-600 flex items-center justify-center">
               <Wallet className="text-white" size={18} />
             </div>
-            <span className="font-semibold text-lg tracking-tight text-slate-900 dark:text-slate-100">
+            <h1 className="font-semibold text-lg tracking-tight text-slate-900 dark:text-slate-100">
               FinFlow
-            </span>
+            </h1>
           </div>
 
           {tabs ? (
@@ -148,9 +148,9 @@ export default function LoginPage() {
             </div>
           ) : (
             <div className="mb-5">
-              <h1 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
                 {mode === 'forgot' ? 'Recuperar acesso' : 'Criar nova senha'}
-              </h1>
+              </h2>
               {mode === 'forgot' && (
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                   Digite o e-mail da conta. Enviamos um link para você criar uma nova senha.
@@ -272,6 +272,6 @@ export default function LoginPage() {
           </p>
         )}
       </div>
-    </div>
+    </main>
   );
 }
