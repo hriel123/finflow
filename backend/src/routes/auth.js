@@ -41,7 +41,8 @@ function hashToken(token) {
 }
 
 router.post('/register', authLimiter, async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, password } = req.body;
+  const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
 
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'name, email and password are required' });
@@ -55,7 +56,7 @@ router.post('/register', authLimiter, async (req, res) => {
     return res.status(400).json({ error: 'password must be at least 6 characters long' });
   }
 
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const existing = await prisma.user.findFirst({ where: { email: { equals: email, mode: 'insensitive' } } });
   if (existing) {
     return res.status(409).json({ error: 'email already registered' });
   }
@@ -69,13 +70,15 @@ router.post('/register', authLimiter, async (req, res) => {
 });
 
 router.post('/login', authLimiter, async (req, res) => {
-  const { email, password } = req.body;
+  const { password } = req.body;
+  const email = typeof req.body.email === 'string' ? req.body.email.trim() : '';
 
   if (!email || !password) {
     return res.status(400).json({ error: 'email and password are required' });
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const matches = await prisma.user.findMany({ where: { email: { equals: email, mode: 'insensitive' } } });
+  const user = matches.find((u) => u.email === email) ?? matches[0];
   const validPassword = await bcrypt.compare(password, user?.password ?? DUMMY_HASH);
   if (!user || !validPassword) {
     return res.status(401).json({ error: 'invalid credentials' });
