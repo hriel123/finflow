@@ -1,10 +1,16 @@
 import { Router } from 'express';
 import { prisma, findOwned } from '../lib/prisma.js';
+import { textError } from '../lib/validate.js';
 
 const router = Router();
 
 router.post('/', async (req, res) => {
   const { name, type } = req.body;
+
+  const invalidText = textError([name, type], 50);
+  if (invalidText) {
+    return res.status(400).json({ error: invalidText });
+  }
 
   if (!name || !type) {
     return res.status(400).json({ error: 'name and type are required' });

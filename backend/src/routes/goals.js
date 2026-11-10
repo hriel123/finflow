@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { prisma, findOwned } from '../lib/prisma.js';
+import { MAX_AMOUNT, textError } from '../lib/validate.js';
 
 const router = Router();
 
@@ -10,6 +11,11 @@ function parseValidDate(value) {
 
 router.post('/', async (req, res) => {
   const { title, description, category, icon, targetAmount, currentAmount, deadline } = req.body;
+
+  const invalidText = textError([title, description, category, icon, deadline], 200);
+  if (invalidText) {
+    return res.status(400).json({ error: invalidText });
+  }
 
   if (!title || !category || !icon || targetAmount === undefined || !deadline) {
     return res
@@ -26,6 +32,10 @@ router.post('/', async (req, res) => {
     (typeof currentAmount !== 'number' || !Number.isFinite(currentAmount) || currentAmount < 0)
   ) {
     return res.status(400).json({ error: 'currentAmount must be a non-negative number' });
+  }
+
+  if (targetAmount > MAX_AMOUNT || currentAmount > MAX_AMOUNT) {
+    return res.status(400).json({ error: 'amount too large' });
   }
 
   const parsedDeadline = parseValidDate(deadline);
@@ -87,6 +97,11 @@ router.put('/:id', async (req, res) => {
 
   const { title, description, category, icon, targetAmount, currentAmount, deadline } = req.body;
 
+  const invalidText = textError([title, description, category, icon, deadline], 200);
+  if (invalidText) {
+    return res.status(400).json({ error: invalidText });
+  }
+
   if (title !== undefined && !title) {
     return res.status(400).json({ error: 'title cannot be empty' });
   }
@@ -111,6 +126,10 @@ router.put('/:id', async (req, res) => {
     (typeof currentAmount !== 'number' || !Number.isFinite(currentAmount) || currentAmount < 0)
   ) {
     return res.status(400).json({ error: 'currentAmount must be a non-negative number' });
+  }
+
+  if (targetAmount > MAX_AMOUNT || currentAmount > MAX_AMOUNT) {
+    return res.status(400).json({ error: 'amount too large' });
   }
 
   let parsedDeadline;
@@ -152,9 +171,17 @@ router.post('/:id/deposit', async (req, res) => {
     return res.status(400).json({ error: 'amount must be a positive number' });
   }
 
+  if (amount > MAX_AMOUNT) {
+    return res.status(400).json({ error: 'amount too large' });
+  }
+
   const existing = await findOwned(prisma.goal, id, req.userId);
   if (!existing) {
     return res.status(404).json({ error: 'goal not found' });
+  }
+
+  if (Number(existing.currentAmount) + amount > MAX_AMOUNT) {
+    return res.status(400).json({ error: 'amount too large' });
   }
 
   const goal = await prisma.goal.update({
@@ -174,6 +201,10 @@ router.post('/:id/withdraw', async (req, res) => {
   const { amount } = req.body;
   if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
     return res.status(400).json({ error: 'amount must be a positive number' });
+  }
+
+  if (amount > MAX_AMOUNT) {
+    return res.status(400).json({ error: 'amount too large' });
   }
 
   const existing = await findOwned(prisma.goal, id, req.userId);

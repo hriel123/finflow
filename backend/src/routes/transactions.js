@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { prisma, findOwned } from '../lib/prisma.js';
+import { MAX_AMOUNT, textError } from '../lib/validate.js';
 
 const router = Router();
 
@@ -10,6 +11,11 @@ function parseValidDate(value) {
 
 router.post('/', async (req, res) => {
   const { description, category, type, amount, date } = req.body;
+
+  const invalidText = textError([description, category, type, date], 200);
+  if (invalidText) {
+    return res.status(400).json({ error: invalidText });
+  }
 
   if (!description || !category || !type || amount === undefined || !date) {
     return res
@@ -23,6 +29,10 @@ router.post('/', async (req, res) => {
 
   if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
     return res.status(400).json({ error: 'amount must be a positive number' });
+  }
+
+  if (amount > MAX_AMOUNT) {
+    return res.status(400).json({ error: 'amount too large' });
   }
 
   const parsedDate = parseValidDate(date);
@@ -82,6 +92,11 @@ router.put('/:id', async (req, res) => {
 
   const { description, category, type, amount, date } = req.body;
 
+  const invalidText = textError([description, category, type, date], 200);
+  if (invalidText) {
+    return res.status(400).json({ error: invalidText });
+  }
+
   if (description !== undefined && !description) {
     return res.status(400).json({ error: 'description cannot be empty' });
   }
@@ -99,6 +114,10 @@ router.put('/:id', async (req, res) => {
     (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0)
   ) {
     return res.status(400).json({ error: 'amount must be a positive number' });
+  }
+
+  if (amount > MAX_AMOUNT) {
+    return res.status(400).json({ error: 'amount too large' });
   }
 
   let parsedDate;

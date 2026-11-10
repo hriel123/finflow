@@ -6,6 +6,7 @@ import rateLimit from 'express-rate-limit';
 import { prisma } from '../lib/prisma.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { escapeHtml, mailConfigured, sendMail } from '../lib/mail.js';
+import { textError } from '../lib/validate.js';
 
 const router = Router();
 
@@ -44,6 +45,11 @@ router.post('/register', authLimiter, async (req, res) => {
   const { name, password } = req.body;
   const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
 
+  const invalidText = textError([name, req.body.email, password], 100);
+  if (invalidText) {
+    return res.status(400).json({ error: invalidText });
+  }
+
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'name, email and password are required' });
   }
@@ -72,6 +78,10 @@ router.post('/register', authLimiter, async (req, res) => {
 router.post('/login', authLimiter, async (req, res) => {
   const { password } = req.body;
   const email = typeof req.body.email === 'string' ? req.body.email.trim() : '';
+
+  if (password !== undefined && typeof password !== 'string') {
+    return res.status(400).json({ error: 'invalid field type' });
+  }
 
   if (!email || !password) {
     return res.status(400).json({ error: 'email and password are required' });
@@ -133,6 +143,10 @@ router.post('/reset', authLimiter, async (req, res) => {
     return res.status(400).json({ error: 'password must be at least 6 characters long' });
   }
 
+  if (password.length > 100) {
+    return res.status(400).json({ error: 'text too long' });
+  }
+
   const reset = await prisma.passwordReset.findUnique({ where: { tokenHash: hashToken(token) } });
   if (!reset || reset.usedAt || reset.expiresAt < new Date()) {
     return res.status(400).json({ error: 'invalid or expired reset link' });
@@ -159,6 +173,11 @@ router.get('/me', authMiddleware, async (req, res) => {
 
 router.put('/me', authMiddleware, async (req, res) => {
   const { name, email } = req.body;
+
+  const invalidText = textError([name, email], 100);
+  if (invalidText) {
+    return res.status(400).json({ error: invalidText });
+  }
 
   if (!name || !email) {
     return res.status(400).json({ error: 'name and email are required' });
