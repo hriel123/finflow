@@ -21,3 +21,14 @@ export const GOAL_ICONS = {
 };
 
 export const GOAL_ICON_KEYS = Object.keys(GOAL_ICONS);
+
+export const GOAL_ICON_LABELS = {
+  plane: 'Avião',
+  laptop: 'Notebook',
+  home: 'Casa',
+  car: 'Carro',
+  graduationCap: 'Formatura',
+  piggyBank: 'Cofrinho',
+  shoppingBag: 'Sacola de compras',
+  target: 'Alvo',
+};

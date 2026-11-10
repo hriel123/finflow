@@ -46,6 +46,7 @@ export default function CategoriesTab() {
         <Select aria-label="Tipo da categoria" value={type} onChange={setType} options={TYPE_OPTIONS} className="w-full sm:w-32 shrink-0" />
         <button
           type="submit"
+          aria-label="Adicionar categoria"
           className="shrink-0 flex items-center justify-center gap-1.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition-colors active:scale-[0.98]"
         >
           <Plus size={16} />

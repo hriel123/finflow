@@ -90,6 +90,8 @@ export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, on
         <div className="relative">
           <button
             onClick={() => setMenuOpen((o) => !o)}
+            aria-label={`Mais opções da meta ${goal.name}`}
+            aria-expanded={menuOpen}
             className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
           >
             <MoreVertical size={18} />

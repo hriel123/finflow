@@ -48,6 +48,7 @@ export default function Sidebar({ open, onClose, theme, onToggleTheme, user, onL
           </div>
           <button
             onClick={onClose}
+            aria-label="Fechar menu"
             className="lg:hidden text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded-lg"
           >
             <X size={20} />

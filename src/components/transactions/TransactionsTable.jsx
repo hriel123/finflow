@@ -93,6 +93,7 @@ export default function TransactionsTable({ transactions, onEdit, onDelete }) {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  aria-label="Página anterior"
                   disabled={page === 1}
                   className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >
@@ -100,6 +101,7 @@ export default function TransactionsTable({ transactions, onEdit, onDelete }) {
                 </button>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  aria-label="Próxima página"
                   disabled={page === totalPages}
                   className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >

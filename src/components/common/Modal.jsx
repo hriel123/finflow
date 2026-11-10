@@ -24,6 +24,7 @@ export default function Modal({ title, onClose, children, maxWidthClass = 'sm:ma
           <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded-lg"
           >
             <X size={20} />

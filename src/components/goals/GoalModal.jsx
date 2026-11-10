@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GOAL_CATEGORIES } from '../../data/goalCategories.js';
-import { GOAL_ICONS, GOAL_ICON_KEYS } from '../../data/goalIcons.js';
+import { GOAL_ICONS, GOAL_ICON_KEYS, GOAL_ICON_LABELS } from '../../data/goalIcons.js';
 import Modal from '../common/Modal.jsx';
 import Select from '../common/Select.jsx';
 import CurrencyInput from '../common/CurrencyInput.jsx';
@@ -176,6 +176,7 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
                   type="button"
                   onClick={() => setIcon(key)}
                   aria-pressed={selected}
+                  aria-label={GOAL_ICON_LABELS[key]}
                   className={`flex items-center justify-center rounded-xl border py-2.5 transition-colors ${
                     selected
                       ? 'bg-primary-50 dark:bg-primary-500/10 border-primary-500 text-primary-600 dark:text-primary-400'
