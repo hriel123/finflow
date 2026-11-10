@@ -45,7 +45,7 @@ export default function CurrencyInput({ value, onChange, step = 10, error = fals
           type="button"
           onClick={increment}
           title={`Adicionar R$ ${step},00`}
-          className="flex-1 px-2.5 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-[#1e293b] dark:hover:bg-slate-700 active:scale-95 text-slate-700 dark:text-slate-50 transition-colors duration-200 ease-in-out border-b border-slate-300 dark:border-slate-700"
+          className="flex-1 min-h-6 px-2.5 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-[#1e293b] dark:hover:bg-slate-700 active:scale-95 text-slate-700 dark:text-slate-50 transition-colors duration-200 ease-in-out border-b border-slate-300 dark:border-slate-700"
         >
           <Plus size={12} />
         </button>
@@ -53,7 +53,7 @@ export default function CurrencyInput({ value, onChange, step = 10, error = fals
           type="button"
           onClick={decrement}
           title={`Remover R$ ${step},00`}
-          className="flex-1 px-2.5 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-[#1e293b] dark:hover:bg-slate-700 active:scale-95 text-slate-700 dark:text-slate-50 transition-colors duration-200 ease-in-out"
+          className="flex-1 min-h-6 px-2.5 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-[#1e293b] dark:hover:bg-slate-700 active:scale-95 text-slate-700 dark:text-slate-50 transition-colors duration-200 ease-in-out"
         >
           <Minus size={12} />
         </button>

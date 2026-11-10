@@ -103,7 +103,7 @@ function CategoryRow({ category, onDelete }) {
       <button
         onClick={() => onDelete(category)}
         title="Excluir categoria"
-        className="text-slate-400 hover:text-expense-600 dark:hover:text-expense-400 transition-colors shrink-0"
+        className="p-1.5 rounded-lg text-slate-400 hover:text-expense-600 dark:hover:text-expense-400 transition-colors shrink-0"
       >
         <Trash2 size={14} />
       </button>

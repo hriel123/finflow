@@ -21,7 +21,7 @@ export default function SettingsPage({ theme, onToggleTheme }) {
             key={key}
             onClick={() => setActiveTab(key)}
             aria-pressed={activeTab === key}
-            className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2.5 text-xs sm:text-sm font-medium border-b-2 -mb-px shrink-0 whitespace-nowrap transition-colors ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2.5 text-xs sm:text-sm font-medium border-b-2 -mb-px shrink-0 whitespace-nowrap transition-colors focus-visible:ring-inset ${
               activeTab === key
                 ? 'border-primary-600 text-primary-600 dark:text-primary-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'

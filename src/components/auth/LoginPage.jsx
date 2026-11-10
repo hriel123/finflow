@@ -131,14 +131,14 @@ export default function LoginPage() {
           </div>
 
           {tabs ? (
-            <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden mb-5">
+            <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 mb-5">
               {[['login', 'Entrar'], ['register', 'Criar conta']].map(([key, label]) => (
                 <button
                   key={key}
                   type="button"
                   onClick={() => handleModeChange(key)}
                   aria-pressed={mode === key}
-                  className={`flex-1 text-sm font-medium py-1.5 transition-colors ${
+                  className={`flex-1 min-h-11 text-sm font-medium first:rounded-l-[11px] last:rounded-r-[11px] transition-colors ${
                     mode === key ? 'bg-primary-600 text-white' : 'text-slate-500 dark:text-slate-400'
                   }`}
                 >
@@ -185,7 +185,7 @@ export default function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     aria-label={showPassword ? 'Ocultar a senha' : 'Mostrar a senha'}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
+                    className="absolute right-0 inset-y-0 rounded-r-xl px-3 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
                   >
                     {showPassword ? 'Ocultar' : 'Mostrar'}
                   </button>
@@ -202,7 +202,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => handleModeChange('forgot')}
-                  className="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
+                  className="inline-block py-1 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
                 >
                   Esqueci minha senha
                 </button>
@@ -224,7 +224,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-xl shadow-sm transition-colors active:scale-[0.98]"
+              className="w-full bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white text-sm font-medium py-3 rounded-xl shadow-sm transition-colors active:scale-[0.98]"
             >
               {submitLabel}
             </button>

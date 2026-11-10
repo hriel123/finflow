@@ -38,7 +38,7 @@ export default function Header({ onMenuClick }) {
   return (
     <>
     {isDemo && (
-      <div className="bg-primary-600 text-white text-xs sm:text-sm px-4 sm:px-6 py-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
+      <div className="bg-primary-600 text-white text-xs sm:text-sm px-4 sm:px-6 py-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
         <span className="inline-flex items-center gap-1.5">
           <Sparkles size={14} />
           Modo demonstração: dados de exemplo, salvos só neste navegador.
@@ -46,7 +46,7 @@ export default function Header({ onMenuClick }) {
         <button
           type="button"
           onClick={createAccount}
-          className="font-semibold underline underline-offset-2 hover:text-primary-100"
+          className="py-1 font-semibold underline underline-offset-2 hover:text-primary-100"
         >
           Criar minha conta
         </button>
@@ -57,7 +57,7 @@ export default function Header({ onMenuClick }) {
         <button
           onClick={onMenuClick}
           aria-label="Abrir menu"
-          className="lg:hidden text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded-lg"
+          className="lg:hidden p-1 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded-lg"
         >
           <Menu size={22} />
         </button>
