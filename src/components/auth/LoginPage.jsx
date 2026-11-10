@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Wallet, Sparkles } from 'lucide-react';
+import { Wallet } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { translateServerError } from '../../lib/api.js';
 
@@ -121,7 +121,7 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">
       <div className="w-full max-w-sm">
         <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-6">
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-primary-600 flex items-center justify-center">
               <Wallet className="text-white" size={18} />
             </div>
@@ -129,6 +129,24 @@ export default function LoginPage() {
               FinFlow
             </h1>
           </div>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 mb-5">
+            Controle financeiro pessoal: receitas, despesas, metas de economia e relatórios.
+          </p>
+
+          {tabs && (
+            <div className="mb-5">
+              <button
+                type="button"
+                onClick={handleDemo}
+                className="w-full rounded-xl border border-dashed border-slate-300 dark:border-slate-700 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
+              >
+                Experimentar sem conta
+              </button>
+              <p className="mt-2 text-xs text-center text-slate-500 dark:text-slate-400">
+                Com dados de exemplo, salvos só neste navegador.
+              </p>
+            </div>
+          )}
 
           {tabs ? (
             <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 mb-5">
@@ -230,7 +248,7 @@ export default function LoginPage() {
             </button>
 
             {mode === 'register' && (
-              <p className="text-xs text-center text-slate-400">
+              <p className="text-xs text-center text-slate-500 dark:text-slate-400">
                 Ao criar a conta, você concorda com a{' '}
                 <a href="/privacidade.html" target="_blank" rel="noopener" className="text-primary-600 dark:text-primary-400 underline">
                   política de privacidade
@@ -256,21 +274,6 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {tabs && (
-          <button
-            type="button"
-            onClick={handleDemo}
-            className="mt-4 w-full flex items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
-          >
-            <Sparkles size={16} />
-            Experimentar sem conta
-          </button>
-        )}
-        {tabs && (
-          <p className="mt-2 text-xs text-center text-slate-400">
-            Com dados de exemplo, salvos só neste navegador.
-          </p>
-        )}
       </div>
     </main>
   );
