@@ -112,7 +112,7 @@ export default function Select({
           error ? 'border-expense-500' : 'border-slate-200 dark:border-slate-700'
         }`}
       >
-        <span className={`truncate ${selected ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'}`}>
+        <span className={`truncate ${selected ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}>
           {selected ? selected.label : placeholder}
         </span>
         <ChevronDown

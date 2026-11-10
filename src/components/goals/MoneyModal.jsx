@@ -66,7 +66,7 @@ export default function MoneyModal({ goal, mode, onClose, onConfirm }) {
           />
           {error && <p id="money-amount-error" role="alert" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{error}</p>}
           {mode === 'withdraw' && (
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Disponível: {formatCurrency(goal.savedAmount, currency)}
             </p>
           )}

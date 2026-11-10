@@ -22,7 +22,7 @@ export default function TransactionsTable({ transactions, onEdit, onDelete }) {
       {transactions.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-16 px-5 text-center">
           <Inbox size={24} className="text-slate-300 dark:text-slate-600" />
-          <p className="text-sm text-slate-400">Nenhuma transação encontrada.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Nenhuma transação encontrada.</p>
         </div>
       ) : (
         <>
@@ -48,7 +48,7 @@ export default function TransactionsTable({ transactions, onEdit, onDelete }) {
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
                         {t.description}
                       </p>
-                      <p className="text-xs text-slate-400 truncate">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                         {t.category} · {formatDateBR(t.date)}
                       </p>
                     </div>
@@ -87,7 +87,7 @@ export default function TransactionsTable({ transactions, onEdit, onDelete }) {
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between px-5 py-3.5 border-t border-slate-100 dark:border-slate-800">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Página {page} de {totalPages} · {transactions.length} lançamento(s)
               </p>
               <div className="flex items-center gap-1.5">

@@ -77,7 +77,7 @@ export default function GoalsPage() {
             <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
               Você ainda não possui metas.
             </p>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
               Crie sua primeira meta financeira e comece a acompanhar seu progresso.
             </p>
           </div>
@@ -96,8 +96,8 @@ export default function GoalsPage() {
 
           {filteredGoals.length === 0 ? (
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-5 text-center">
-              <p className="text-sm text-slate-400">Nenhuma meta encontrada.</p>
-              <p className="text-sm text-slate-400">Tente alterar os filtros.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Nenhuma meta encontrada.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Tente alterar os filtros.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

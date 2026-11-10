@@ -29,7 +29,7 @@ export default function CategoriesTab() {
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 max-w-lg space-y-5">
       <div>
         <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Categorias personalizadas</h2>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           Crie categorias próprias para usar nas suas transações, além das categorias padrão.
         </p>
       </div>
@@ -58,7 +58,7 @@ export default function CategoriesTab() {
       {categories.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
           <Tag size={22} className="text-slate-300 dark:text-slate-600" />
-          <p className="text-sm text-slate-400">Nenhuma categoria personalizada ainda.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Nenhuma categoria personalizada ainda.</p>
         </div>
       ) : (
         <div className="space-y-4">

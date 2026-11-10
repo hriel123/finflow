@@ -89,7 +89,7 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
 
         <div>
           <label htmlFor="goal-description" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-            Descrição <span className="text-slate-400 font-normal">(opcional)</span>
+            Descrição <span className="text-slate-500 dark:text-slate-400 font-normal">(opcional)</span>
           </label>
           <input
             id="goal-description"

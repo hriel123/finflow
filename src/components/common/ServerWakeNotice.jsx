@@ -57,7 +57,7 @@ export default function ServerWakeNotice() {
             Tentar de novo
           </button>
         ) : (
-          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500 money">Aguardando há {seconds} s</p>
+          <p className="mt-2 text-xs text-slate-500 money">Aguardando há {seconds} s</p>
         )}
       </div>
     </div>

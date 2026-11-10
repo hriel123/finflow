@@ -25,7 +25,7 @@ export default function ReportsFilters({ filters, onChange }) {
             onChange={(e) => onChange({ customRange: { ...customRange, start: e.target.value } })}
             className={inputClass}
           />
-          <span className="text-sm text-slate-400 dark:text-slate-500">até</span>
+          <span className="text-sm text-slate-500">até</span>
           <input
             type="date"
             aria-label="Data final"

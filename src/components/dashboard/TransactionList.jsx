@@ -9,13 +9,13 @@ export default function TransactionList({ transactions, onDelete, emptyText = 'N
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 flex flex-col">
       <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-800">
         <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Transações</h2>
-        <span className="text-xs text-slate-400">{transactions.length} lançamento(s)</span>
+        <span className="text-xs text-slate-500 dark:text-slate-400">{transactions.length} lançamento(s)</span>
       </div>
 
       {transactions.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-12 px-5 text-center">
           <Inbox size={24} className="text-slate-300 dark:text-slate-600" />
-          <p className="text-sm text-slate-400">{emptyText}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{emptyText}</p>
         </div>
       ) : (
         <ul className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[420px] overflow-y-auto">
@@ -40,7 +40,7 @@ export default function TransactionList({ transactions, onDelete, emptyText = 'N
                     <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
                       {t.description}
                     </p>
-                    <p className="text-xs text-slate-400 truncate">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                       {t.category} · {formatDateBR(t.date)}
                     </p>
                   </div>
