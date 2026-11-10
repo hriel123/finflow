@@ -20,6 +20,7 @@ export default function SettingsPage({ theme, onToggleTheme }) {
           <button
             key={key}
             onClick={() => setActiveTab(key)}
+            aria-pressed={activeTab === key}
             className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2.5 text-xs sm:text-sm font-medium border-b-2 -mb-px shrink-0 whitespace-nowrap transition-colors ${
               activeTab === key
                 ? 'border-primary-600 text-primary-600 dark:text-primary-400'

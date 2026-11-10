@@ -156,6 +156,7 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
                   key={key}
                   type="button"
                   onClick={() => setIcon(key)}
+                  aria-pressed={selected}
                   className={`flex items-center justify-center rounded-xl border py-2.5 transition-colors ${
                     selected
                       ? 'bg-primary-50 dark:bg-primary-500/10 border-primary-500 text-primary-600 dark:text-primary-400'

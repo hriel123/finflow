@@ -131,6 +131,7 @@ export default function LoginPage() {
                   key={key}
                   type="button"
                   onClick={() => handleModeChange(key)}
+                  aria-pressed={mode === key}
                   className={`flex-1 text-sm font-medium py-1.5 transition-colors ${
                     mode === key ? 'bg-primary-600 text-white' : 'text-slate-500 dark:text-slate-400'
                   }`}

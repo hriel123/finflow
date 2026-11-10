@@ -82,6 +82,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
           <button
             type="button"
             onClick={() => handleTypeChange('income')}
+            aria-pressed={type === 'income'}
             className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
               type === 'income'
                 ? 'bg-income-50 dark:bg-income-500/10 border-income-500 text-income-600 dark:text-income-400'
@@ -94,6 +95,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
           <button
             type="button"
             onClick={() => handleTypeChange('expense')}
+            aria-pressed={type === 'expense'}
             className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
               type === 'expense'
                 ? 'bg-expense-50 dark:bg-expense-500/10 border-expense-500 text-expense-600 dark:text-expense-400'
