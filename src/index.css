@@ -26,15 +26,6 @@
   .money {
     font-variant-numeric: tabular-nums;
   }
-
-  .card-hover-glow {
-    transition: all 0.2s ease-in-out;
-  }
-  .card-hover-glow:hover {
-    transform: translateY(-2px);
-    border-color: #6366f1;
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
-  }
 }
 
 .recharts-wrapper *:focus {
