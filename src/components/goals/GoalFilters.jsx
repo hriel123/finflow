@@ -26,16 +26,17 @@ export default function GoalFilters({ filters, onChange }) {
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-4 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-      <Select value={status} onChange={(v) => onChange({ status: v })} options={STATUS_OPTIONS} className="sm:w-40" />
+      <Select aria-label="Situação" value={status} onChange={(v) => onChange({ status: v })} options={STATUS_OPTIONS} className="sm:w-40" />
 
       <Select
+        aria-label="Categoria"
         value={category}
         onChange={(v) => onChange({ category: v })}
         options={CATEGORY_OPTIONS}
         className="sm:w-48"
       />
 
-      <Select value={sortBy} onChange={(v) => onChange({ sortBy: v })} options={SORT_OPTIONS} className="sm:w-52" />
+      <Select aria-label="Ordenar por" value={sortBy} onChange={(v) => onChange({ sortBy: v })} options={SORT_OPTIONS} className="sm:w-52" />
     </div>
   );
 }

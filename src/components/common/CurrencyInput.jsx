@@ -6,7 +6,7 @@ function round2(value) {
   return Math.round(value * 100) / 100;
 }
 
-export default function CurrencyInput({ value, onChange, step = 10, error = false, autoFocus = false }) {
+export default function CurrencyInput({ value, onChange, step = 10, error = false, autoFocus = false, id, 'aria-describedby': ariaDescribedBy }) {
   const { currency } = useCurrency();
 
   function handleTextChange(e) {
@@ -31,8 +31,11 @@ export default function CurrencyInput({ value, onChange, step = 10, error = fals
     >
       <input
         type="text"
+        id={id}
         inputMode="numeric"
         autoFocus={autoFocus}
+        aria-invalid={error || undefined}
+        aria-describedby={ariaDescribedBy}
         value={formatCurrency(value, currency)}
         onChange={handleTextChange}
         className="flex-1 min-w-0 bg-transparent px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none"

@@ -53,11 +53,18 @@ export default function MoneyModal({ goal, mode, onClose, onConfirm }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="money-amount" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Valor
           </label>
-          <CurrencyInput value={amount} onChange={setAmount} error={Boolean(error)} autoFocus />
-          {error && <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{error}</p>}
+          <CurrencyInput
+            id="money-amount"
+            value={amount}
+            onChange={setAmount}
+            error={Boolean(error)}
+            autoFocus
+            aria-describedby={error ? 'money-amount-error' : undefined}
+          />
+          {error && <p id="money-amount-error" role="alert" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{error}</p>}
           {mode === 'withdraw' && (
             <p className="text-xs text-slate-400 mt-1">
               Disponível: {formatCurrency(goal.savedAmount, currency)}

@@ -14,12 +14,13 @@ export default function ReportsFilters({ filters, onChange }) {
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-4 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-      <Select value={period} onChange={(v) => onChange({ period: v })} options={PERIOD_OPTIONS} className="sm:w-44" />
+      <Select aria-label="Período" value={period} onChange={(v) => onChange({ period: v })} options={PERIOD_OPTIONS} className="sm:w-44" />
 
       {period === 'custom' && (
         <div className="flex items-center gap-2">
           <input
             type="date"
+            aria-label="Data inicial"
             value={customRange?.start ?? ''}
             onChange={(e) => onChange({ customRange: { ...customRange, start: e.target.value } })}
             className={inputClass}
@@ -27,6 +28,7 @@ export default function ReportsFilters({ filters, onChange }) {
           <span className="text-sm text-slate-400 dark:text-slate-500">até</span>
           <input
             type="date"
+            aria-label="Data final"
             value={customRange?.end ?? ''}
             onChange={(e) => onChange({ customRange: { ...customRange, end: e.target.value } })}
             className={inputClass}

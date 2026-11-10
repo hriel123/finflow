@@ -34,6 +34,7 @@ export default function FiltersBar({ filters, onChange }) {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-4 flex flex-col sm:flex-row sm:flex-wrap gap-3">
       <Select
+        aria-label="Período"
         value={period}
         onChange={(v) => onChange({ period: v })}
         options={PERIOD_OPTIONS}
@@ -44,6 +45,7 @@ export default function FiltersBar({ filters, onChange }) {
         <div className="flex items-center gap-2">
           <input
             type="date"
+            aria-label="Data inicial"
             value={customRange?.start ?? ''}
             onChange={(e) => onChange({ customRange: { ...customRange, start: e.target.value } })}
             className={dateInputClass}
@@ -51,6 +53,7 @@ export default function FiltersBar({ filters, onChange }) {
           <span className="text-sm text-slate-400 dark:text-slate-500">até</span>
           <input
             type="date"
+            aria-label="Data final"
             value={customRange?.end ?? ''}
             onChange={(e) => onChange({ customRange: { ...customRange, end: e.target.value } })}
             className={dateInputClass}
@@ -58,9 +61,10 @@ export default function FiltersBar({ filters, onChange }) {
         </div>
       )}
 
-      <Select value={type} onChange={(v) => onChange({ type: v })} options={TYPE_OPTIONS} className="sm:w-36" />
+      <Select aria-label="Tipo" value={type} onChange={(v) => onChange({ type: v })} options={TYPE_OPTIONS} className="sm:w-36" />
 
       <Select
+        aria-label="Categoria"
         value={category}
         onChange={(v) => onChange({ category: v })}
         options={categoryOptions}

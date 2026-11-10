@@ -69,26 +69,30 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
     <Modal title={isEdit ? 'Editar meta' : 'Nova meta'} onClose={onClose}>
       <form onSubmit={handleSubmit} className="px-5 py-4 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="goal-name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Nome da meta
           </label>
           <input
+            id="goal-name"
             type="text"
             value={name}
+            aria-invalid={errors.name ? true : undefined}
+            aria-describedby={errors.name ? 'goal-name-error' : undefined}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ex: Comprar Notebook"
             className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
               errors.name ? 'border-expense-500' : 'border-slate-200 dark:border-slate-700'
             }`}
           />
-          {errors.name && <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.name}</p>}
+          {errors.name && <p id="goal-name-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.name}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="goal-description" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Descrição <span className="text-slate-400 font-normal">(opcional)</span>
           </label>
           <input
+            id="goal-description"
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -99,55 +103,70 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <label htmlFor="goal-target" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Valor objetivo
             </label>
-            <CurrencyInput value={targetAmount} onChange={setTargetAmount} error={Boolean(errors.targetAmount)} />
+            <CurrencyInput
+              id="goal-target"
+              value={targetAmount}
+              onChange={setTargetAmount}
+              error={Boolean(errors.targetAmount)}
+              aria-describedby={errors.targetAmount ? 'goal-target-error' : undefined}
+            />
             {errors.targetAmount && (
-              <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.targetAmount}</p>
+              <p id="goal-target-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.targetAmount}</p>
             )}
           </div>
 
           {!isEdit && (
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label htmlFor="goal-initial" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Valor inicial
               </label>
-              <CurrencyInput value={initialAmount} onChange={setInitialAmount} error={Boolean(errors.initialAmount)} />
+              <CurrencyInput
+                id="goal-initial"
+                value={initialAmount}
+                onChange={setInitialAmount}
+                error={Boolean(errors.initialAmount)}
+                aria-describedby={errors.initialAmount ? 'goal-initial-error' : undefined}
+              />
               {errors.initialAmount && (
-                <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.initialAmount}</p>
+                <p id="goal-initial-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.initialAmount}</p>
               )}
             </div>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="goal-deadline" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Prazo
           </label>
           <input
+            id="goal-deadline"
             type="date"
             value={deadline}
+            aria-invalid={errors.deadline ? true : undefined}
+            aria-describedby={errors.deadline ? 'goal-deadline-error' : undefined}
             onChange={(e) => setDeadline(e.target.value)}
             className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
               errors.deadline ? 'border-expense-500' : 'border-slate-200 dark:border-slate-700'
             }`}
           />
-          {errors.deadline && <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.deadline}</p>}
+          {errors.deadline && <p id="goal-deadline-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.deadline}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="goal-category" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Categoria
           </label>
-          <Select value={category} onChange={setCategory} options={GOAL_CATEGORIES} />
+          <Select id="goal-category" value={category} onChange={setCategory} options={GOAL_CATEGORIES} />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <p id="goal-icon-label" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
             Ícone
-          </label>
-          <div className="grid grid-cols-4 gap-2">
+          </p>
+          <div role="group" aria-labelledby="goal-icon-label" className="grid grid-cols-4 gap-2">
             {GOAL_ICON_KEYS.map((key) => {
               const IconComp = GOAL_ICONS[key];
               const selected = icon === key;
@@ -171,7 +190,7 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
         </div>
 
         {submitError && (
-          <p className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
+          <p role="alert" className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
             {submitError}
           </p>
         )}

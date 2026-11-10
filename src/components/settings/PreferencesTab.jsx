@@ -18,9 +18,10 @@ export default function PreferencesTab({ theme, onToggleTheme }) {
       <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Preferências</h2>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tema</label>
+        <p id="pref-theme-label" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tema</p>
         <button
           onClick={onToggleTheme}
+          aria-describedby="pref-theme-label"
           className="w-full flex items-center justify-between gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
         >
           <span className="flex items-center gap-2">
@@ -31,8 +32,8 @@ export default function PreferencesTab({ theme, onToggleTheme }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Moeda padrão</label>
-        <Select value={currency} onChange={setCurrency} options={CURRENCY_OPTIONS} />
+        <label htmlFor="pref-currency" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Moeda padrão</label>
+        <Select id="pref-currency" value={currency} onChange={setCurrency} options={CURRENCY_OPTIONS} />
       </div>
     </div>
   );

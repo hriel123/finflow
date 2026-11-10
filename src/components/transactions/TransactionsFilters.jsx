@@ -29,13 +29,15 @@ export default function TransactionsFilters({ filters, onChange }) {
           value={search}
           onChange={(e) => onChange({ search: e.target.value })}
           placeholder="Buscar por descrição..."
+          aria-label="Buscar por descrição"
           className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 pl-9 pr-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
         />
       </div>
 
-      <Select value={type} onChange={(v) => onChange({ type: v })} options={TYPE_OPTIONS} className="sm:w-36" />
+      <Select aria-label="Tipo" value={type} onChange={(v) => onChange({ type: v })} options={TYPE_OPTIONS} className="sm:w-36" />
 
       <Select
+        aria-label="Categoria"
         value={category}
         onChange={(v) => onChange({ category: v })}
         options={categoryOptions}

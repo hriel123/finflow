@@ -30,8 +30,9 @@ export default function ProfileTab() {
       <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Perfil</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome</label>
+          <label htmlFor="profile-name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome</label>
           <input
+            id="profile-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -41,8 +42,9 @@ export default function ProfileTab() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">E-mail</label>
+          <label htmlFor="profile-email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">E-mail</label>
           <input
+            id="profile-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -51,7 +53,7 @@ export default function ProfileTab() {
           />
         </div>
 
-        {error && <p className="text-sm text-expense-600 dark:text-expense-400">{error}</p>}
+        {error && <p role="alert" className="text-sm text-expense-600 dark:text-expense-400">{error}</p>}
         {success && <p className="text-sm text-income-600 dark:text-income-400">Perfil atualizado com sucesso.</p>}
 
         <button

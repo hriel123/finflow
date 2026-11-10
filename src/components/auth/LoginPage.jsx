@@ -97,14 +97,20 @@ export default function LoginPage() {
   function field(key, label, input) {
     return (
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{label}</label>
+        <label htmlFor={`login-${key}`} className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{label}</label>
         {input}
         {fieldErrors[key] && (
-          <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{fieldErrors[key]}</p>
+          <p id={`login-${key}-error`} className="text-xs text-expense-600 dark:text-expense-400 mt-1">{fieldErrors[key]}</p>
         )}
       </div>
     );
   }
+
+  const fieldProps = (key) => ({
+    id: `login-${key}`,
+    'aria-invalid': fieldErrors[key] ? true : undefined,
+    'aria-describedby': fieldErrors[key] ? `login-${key}-error` : undefined,
+  });
 
   const inputClass = (key) =>
     `w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
@@ -156,18 +162,19 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {mode === 'register' &&
               field('name', 'Nome', (
-                <input type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} className={inputClass('name')} />
+                <input {...fieldProps('name')} type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} className={inputClass('name')} />
               ))}
 
             {mode !== 'reset' &&
               field('email', 'E-mail', (
-                <input type="text" inputMode="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass('email')} />
+                <input {...fieldProps('email')} type="text" inputMode="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass('email')} />
               ))}
 
             {mode !== 'forgot' &&
               field('password', mode === 'reset' ? 'Nova senha' : 'Senha', (
                 <div className="relative">
                   <input
+                    {...fieldProps('password')}
                     type={showPassword ? 'text' : 'password'}
                     autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                     value={password}
@@ -187,7 +194,7 @@ export default function LoginPage() {
 
             {mode === 'reset' &&
               field('confirm', 'Repita a nova senha', (
-                <input type={showPassword ? 'text' : 'password'} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} className={inputClass('confirm')} />
+                <input {...fieldProps('confirm')} type={showPassword ? 'text' : 'password'} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} className={inputClass('confirm')} />
               ))}
 
             {mode === 'login' && (
@@ -203,7 +210,7 @@ export default function LoginPage() {
             )}
 
             {serverError && (
-              <p className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
+              <p role="alert" className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
                 {serverError}
               </p>
             )}

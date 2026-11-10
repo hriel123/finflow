@@ -109,12 +109,15 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
 
         {/* Descrição */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="tx-description" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Descrição
           </label>
           <input
+            id="tx-description"
             type="text"
             value={description}
+            aria-invalid={errors.description ? true : undefined}
+            aria-describedby={errors.description ? 'tx-description-error' : undefined}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Ex: Supermercado, Salário..."
             className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
@@ -122,27 +125,35 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
             }`}
           />
           {errors.description && (
-            <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.description}</p>
+            <p id="tx-description-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.description}</p>
           )}
         </div>
 
         {/* Valor */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="tx-amount" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Valor
           </label>
-          <CurrencyInput value={amount} onChange={setAmount} error={Boolean(errors.amount)} />
+          <CurrencyInput
+            id="tx-amount"
+            value={amount}
+            onChange={setAmount}
+            error={Boolean(errors.amount)}
+            aria-describedby={errors.amount ? 'tx-amount-error' : undefined}
+          />
           {errors.amount && (
-            <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.amount}</p>
+            <p id="tx-amount-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.amount}</p>
           )}
         </div>
 
         {/* Categoria */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="tx-category" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Categoria
           </label>
           <Select
+            id="tx-category"
+            aria-describedby={errors.category ? 'tx-category-error' : undefined}
             value={category}
             onChange={setCategory}
             options={categories}
@@ -150,28 +161,31 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
             error={Boolean(errors.category)}
           />
           {errors.category && (
-            <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.category}</p>
+            <p id="tx-category-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.category}</p>
           )}
         </div>
 
         {/* Data */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          <label htmlFor="tx-date" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Data
           </label>
           <input
+            id="tx-date"
             type="date"
             value={date}
+            aria-invalid={errors.date ? true : undefined}
+            aria-describedby={errors.date ? 'tx-date-error' : undefined}
             onChange={(e) => setDate(e.target.value)}
             className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ${
               errors.date ? 'border-expense-500' : 'border-slate-200 dark:border-slate-700'
             }`}
           />
-          {errors.date && <p className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.date}</p>}
+          {errors.date && <p id="tx-date-error" className="text-xs text-expense-600 dark:text-expense-400 mt-1">{errors.date}</p>}
         </div>
 
         {submitError && (
-          <p className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
+          <p role="alert" className="text-sm text-expense-600 dark:text-expense-400 bg-expense-50 dark:bg-expense-500/10 rounded-xl px-3 py-2.5">
             {submitError}
           </p>
         )}
