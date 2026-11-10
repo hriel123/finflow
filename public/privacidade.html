@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Política de privacidade — FinFlow</title>
+<title>Política de privacidade | FinFlow</title>
 <meta name="description" content="Quais dados o FinFlow guarda, para que usa e como pedir correção ou exclusão.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <script>
@@ -54,9 +54,9 @@
 
     <h2>Quais dados guardamos</h2>
     <ul>
-      <li><strong>Conta:</strong> nome, e-mail e data de criação. A senha é guardada só em forma criptografada (hash); ninguém consegue lê-la, nem nós.</li>
+      <li><strong>Conta:</strong> nome, e-mail e data de criação. A senha é guardada só como hash (bcrypt), nunca o texto original; ninguém consegue lê-la, nem nós.</li>
       <li><strong>Dados financeiros que você cadastra:</strong> transações (descrição, categoria, tipo, valor e data), metas (nome, descrição, valores e prazo) e categorias personalizadas. O FinFlow não se conecta a bancos nem pede dados bancários ou de cartão.</li>
-      <li><strong>Recuperação de senha:</strong> quando você pede um link, guardamos um código temporário, também criptografado, que vale 30 minutos.</li>
+      <li><strong>Recuperação de senha:</strong> quando você pede um link, guardamos só o hash de um código temporário, que vale 30 minutos.</li>
       <li><strong>No seu navegador:</strong> o acesso à conta (para você não precisar entrar toda vez), o tema claro ou escuro, a moeda escolhida e, no modo demonstração, os dados de exemplo, que nunca são enviados ao servidor.</li>
     </ul>
 
@@ -71,7 +71,7 @@
     <p>Os dados ficam guardados enquanto a conta existir. Você pode apagar transações, metas e categorias a qualquer momento pelo próprio aplicativo.</p>
 
     <h2>Segurança</h2>
-    <p>Toda a comunicação usa conexão segura (HTTPS), as senhas são criptografadas e há limite de tentativas de login para dificultar ataques.</p>
+    <p>Toda a comunicação usa conexão segura (HTTPS), as senhas são guardadas como hash (bcrypt) e há limite de tentativas de login para dificultar ataques.</p>
 
     <h2>Seus direitos</h2>
     <p>Você pode pedir para ver, corrigir ou excluir os seus dados e a sua conta. Basta escrever para <a href="mailto:hariel.silvafabricio@gmail.com">hariel.silvafabricio@gmail.com</a> usando o e-mail da conta. O pedido é atendido em até 15 dias.</p>

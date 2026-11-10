@@ -49,7 +49,7 @@ function seed() {
   });
 
   return {
-    user: { id: 0, name: 'Visitante', email: 'demonstracao@finflow.app' },
+    user: { id: 0, name: 'Visitante', email: 'demonstracao@example.com' },
     nextId: id + 100,
     transactions: tx,
     goals: [
