@@ -181,11 +181,11 @@ router.post('/:id/withdraw', async (req, res) => {
     return res.status(404).json({ error: 'goal not found' });
   }
 
-  const newAmount = Math.max(0, Number(existing.currentAmount) - amount);
-  const goal = await prisma.goal.update({
-    where: { id: existing.id },
-    data: { currentAmount: newAmount },
-  });
+  const [goal] = await prisma.$queryRaw`
+    UPDATE "Goal"
+    SET "currentAmount" = GREATEST(0, "currentAmount" - ${amount}::numeric)
+    WHERE "id" = ${existing.id} AND "userId" = ${req.userId}
+    RETURNING *`;
 
   res.json(goal);
 });
