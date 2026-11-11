@@ -38,7 +38,7 @@ export default function Header({ onMenuClick }) {
   return (
     <>
     {isDemo && (
-      <div className="bg-primary-600 text-white text-xs sm:text-sm px-4 sm:px-6 py-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
+      <div role="region" aria-label="Modo demonstração" className="bg-primary-600 text-white text-xs sm:text-sm px-4 sm:px-6 py-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
         <span>Modo demonstração: dados de exemplo, salvos só neste navegador.</span>
         <button
           type="button"

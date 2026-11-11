@@ -71,7 +71,11 @@ export default function ExpenseByCategoryChart({ data, theme, emptyText = 'Você
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <ul className="w-full flex-1 space-y-2 overflow-y-auto max-h-full text-sm">
+          <ul
+            tabIndex={0}
+            aria-label="Gastos por categoria"
+            className="w-full flex-1 space-y-2 overflow-y-auto max-h-full text-sm rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
+          >
             {data.map((entry, index) => (
               <li key={entry.category} className="flex items-center justify-between gap-2">
                 <span className="flex items-center gap-2 min-w-0 text-slate-600 dark:text-slate-300 truncate">

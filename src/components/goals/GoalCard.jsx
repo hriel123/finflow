@@ -50,9 +50,9 @@ export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, on
             <Icon size={20} />
           </div>
           <div className="min-w-0">
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
               {goal.name}
-            </h3>
+            </h2>
             {goal.description && (
               <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{goal.description}</p>
             )}
