@@ -234,7 +234,7 @@ export default function LoginPage() {
             )}
 
             {sent && (
-              <p className="text-sm text-income-600 bg-income-50 dark:bg-income-500/10 rounded-xl px-3 py-2.5">
+              <p className="text-sm text-income-700 bg-income-50 dark:bg-income-500/10 rounded-xl px-3 py-2.5">
                 Se houver uma conta com esse e-mail, enviamos um link para criar uma nova senha. Ele vale 30 minutos. Olhe também a caixa de spam.
               </p>
             )}

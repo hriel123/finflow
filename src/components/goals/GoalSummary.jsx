@@ -21,7 +21,7 @@ export default function GoalSummary({ goals }) {
       label: 'Metas concluídas',
       value: String(completedCount),
       icon: CheckCircle2,
-      badge: 'bg-income-50 dark:bg-income-500/10 text-income-600 dark:text-income-400',
+      badge: 'bg-income-50 dark:bg-income-500/10 text-income-700 dark:text-income-400',
     },
     {
       label: 'Total guardado',

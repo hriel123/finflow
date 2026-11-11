@@ -9,8 +9,8 @@ export default function SummaryCard({ label, value, icon: Icon, variant = 'defau
       text: 'text-slate-900 dark:text-slate-100',
     },
     income: {
-      badge: 'bg-income-50 dark:bg-income-500/10 text-income-600 dark:text-income-400',
-      text: 'text-income-600 dark:text-income-400',
+      badge: 'bg-income-50 dark:bg-income-500/10 text-income-700 dark:text-income-400',
+      text: 'text-income-700 dark:text-income-400',
     },
     expense: {
       badge: 'bg-expense-50 dark:bg-expense-500/10 text-expense-600 dark:text-expense-400',

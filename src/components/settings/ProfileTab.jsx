@@ -57,7 +57,7 @@ export default function ProfileTab() {
         </div>
 
         {error && <p role="alert" className="text-sm text-expense-600 dark:text-expense-400">{error}</p>}
-        {success && <p className="text-sm text-income-600 dark:text-income-400">Perfil atualizado com sucesso.</p>}
+        {success && <p className="text-sm text-income-700 dark:text-income-400">Perfil atualizado com sucesso.</p>}
 
         <button
           type="submit"

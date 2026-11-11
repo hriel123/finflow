@@ -6,7 +6,7 @@ export default function PeriodSummary({ summary }) {
   const { income, expense, balance, topCategory, count } = summary;
 
   const rows = [
-    { label: 'Receitas', value: formatCurrency(income, currency), valueClass: 'text-income-600 dark:text-income-400' },
+    { label: 'Receitas', value: formatCurrency(income, currency), valueClass: 'text-income-700 dark:text-income-400' },
     { label: 'Despesas', value: formatCurrency(expense, currency), valueClass: 'text-expense-600 dark:text-expense-400' },
     { label: 'Saldo', value: formatCurrency(balance, currency), valueClass: 'text-slate-900 dark:text-slate-100' },
     {

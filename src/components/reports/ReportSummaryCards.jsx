@@ -10,7 +10,7 @@ export default function ReportSummaryCards({ avgIncome, avgExpense, biggestExpen
       label: 'Média mensal de receitas',
       value: formatCurrency(avgIncome, currency),
       icon: TrendingUp,
-      badge: 'bg-income-50 dark:bg-income-500/10 text-income-600 dark:text-income-400',
+      badge: 'bg-income-50 dark:bg-income-500/10 text-income-700 dark:text-income-400',
     },
     {
       label: 'Média mensal de despesas',

@@ -85,7 +85,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
             aria-pressed={type === 'income'}
             className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
               type === 'income'
-                ? 'bg-income-50 dark:bg-income-500/10 border-income-500 text-income-600 dark:text-income-400'
+                ? 'bg-income-50 dark:bg-income-500/10 border-income-500 text-income-700 dark:text-income-400'
                 : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >

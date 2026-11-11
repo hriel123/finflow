@@ -59,7 +59,7 @@ export default function GoalCard({ goal, onAddMoney, onWithdrawMoney, onEdit, on
           </div>
         </div>
         {status === 'completed' && (
-          <span className="shrink-0 flex items-center gap-1 text-[11px] font-medium text-income-600 dark:text-income-400 bg-income-50 dark:bg-income-500/10 px-2 py-1 rounded-full">
+          <span className="shrink-0 flex items-center gap-1 text-[11px] font-medium text-income-700 dark:text-income-400 bg-income-50 dark:bg-income-500/10 px-2 py-1 rounded-full">
             <CheckCircle2 size={12} /> Concluída
           </span>
         )}

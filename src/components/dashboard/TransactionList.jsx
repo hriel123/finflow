@@ -30,7 +30,7 @@ export default function TransactionList({ transactions, onDelete, emptyText = 'N
                   <div
                     className={`w-9 h-9 shrink-0 rounded-xl flex items-center justify-center ${
                       isIncome
-                        ? 'bg-income-50 dark:bg-income-500/10 text-income-600 dark:text-income-400'
+                        ? 'bg-income-50 dark:bg-income-500/10 text-income-700 dark:text-income-400'
                         : 'bg-expense-50 dark:bg-expense-500/10 text-expense-600 dark:text-expense-400'
                     }`}
                   >
@@ -49,7 +49,7 @@ export default function TransactionList({ transactions, onDelete, emptyText = 'N
                 <div className="flex items-center gap-3 shrink-0">
                   <span
                     className={`text-sm font-semibold money whitespace-nowrap ${
-                      isIncome ? 'text-income-600 dark:text-income-400' : 'text-expense-600 dark:text-expense-400'
+                      isIncome ? 'text-income-700 dark:text-income-400' : 'text-expense-600 dark:text-expense-400'
                     }`}
                   >
                     {isIncome ? '+' : '-'}
