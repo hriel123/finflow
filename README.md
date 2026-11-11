@@ -137,7 +137,7 @@ Stack sem custo, pensada para compartilhar um link público:
    - `PORT` → o Render define automaticamente; não é necessário configurar
    - `APP_URL` → a URL do front-end na Vercel
    - `BREVO_API_KEY` e `MAIL_FROM` → para o "Esqueci minha senha" (veja abaixo). Sem elas, o app avisa que a recuperação por e-mail não está ativa
-6. Após o deploy, copie a URL pública gerada (ex: `https://finflow-backend.onrender.com`).
+6. Após o deploy, copie a URL pública gerada (a deste projeto é `https://finflow-backend-ox3u.onrender.com`).
 
 ### 3. Front-end (Vercel)
 1. Importe o mesmo repositório no [Vercel](https://vercel.com).
