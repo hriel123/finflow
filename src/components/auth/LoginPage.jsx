@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Wallet } from 'lucide-react';
+import { ArrowRight, Wallet } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { translateServerError } from '../../lib/api.js';
 
@@ -138,9 +138,10 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={handleDemo}
-                className="w-full rounded-xl border border-dashed border-slate-300 dark:border-slate-700 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
+                className="group w-full flex items-center justify-center gap-2 rounded-xl border border-primary-500/30 dark:border-primary-500/40 bg-primary-50 dark:bg-primary-500/10 px-4 py-3 text-sm font-semibold text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 transition-colors"
               >
                 Experimentar sem conta
+                <ArrowRight size={16} aria-hidden="true" className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5" />
               </button>
               <p className="mt-2 text-xs text-center text-slate-500 dark:text-slate-400">
                 Com dados de exemplo, salvos só neste navegador.
