@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Wallet } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Wallet } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { translateServerError } from '../../lib/api.js';
 
@@ -198,15 +198,15 @@ export default function LoginPage() {
                     autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`${inputClass('password')} pr-20`}
+                    className={`${inputClass('password')} pr-12`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     aria-label={showPassword ? 'Ocultar a senha' : 'Mostrar a senha'}
-                    className="absolute right-0 inset-y-0 rounded-r-xl px-3 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
+                    className="absolute right-0 inset-y-0 w-11 flex items-center justify-center rounded-r-xl text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
                   >
-                    {showPassword ? 'Ocultar' : 'Mostrar'}
+                    {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
                   </button>
                 </div>
               ))}
