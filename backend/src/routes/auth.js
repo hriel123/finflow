@@ -175,9 +175,10 @@ router.get('/me', authMiddleware, async (req, res) => {
 });
 
 router.put('/me', authMiddleware, async (req, res) => {
-  const { name, email } = req.body;
+  const { name } = req.body;
+  const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
 
-  const invalidText = textError([name, email], 100);
+  const invalidText = textError([name, req.body.email], 100);
   if (invalidText) {
     return res.status(400).json({ error: invalidText });
   }
@@ -190,8 +191,10 @@ router.put('/me', authMiddleware, async (req, res) => {
     return res.status(400).json({ error: 'invalid email format' });
   }
 
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing && existing.id !== req.userId) {
+  const existing = await prisma.user.findFirst({
+    where: { email: { equals: email, mode: 'insensitive' }, NOT: { id: req.userId } },
+  });
+  if (existing) {
     return res.status(409).json({ error: 'email already registered' });
   }
 
