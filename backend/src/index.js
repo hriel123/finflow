@@ -16,7 +16,7 @@ if (!process.env.JWT_SECRET) {
 const app = express();
 
 app.disable('x-powered-by');
-app.set('trust proxy', 2);
+app.set('trust proxy', 3);
 app.use(cors({ origin: ['https://finflow-omega-five.vercel.app', 'http://localhost:5173'] }));
 app.use(express.json());
 
