@@ -44,6 +44,16 @@ const profileLimiter = rateLimit({
   message: { error: 'too many attempts, please try again later' },
 });
 
+const loginEmailLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => (typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : ''),
+  skipSuccessfulRequests: true,
+  message: { error: 'too many attempts, please try again later' },
+});
+
 const RESET_MINUTES = 30;
 const APP_URL = (process.env.APP_URL || 'https://finflow-omega-five.vercel.app').replace(/\/+$/, '');
 
@@ -85,7 +95,7 @@ router.post('/register', authLimiter, async (req, res) => {
   res.status(201).json({ id: user.id, name: user.name, email: user.email });
 });
 
-router.post('/login', authLimiter, async (req, res) => {
+router.post('/login', authLimiter, loginEmailLimiter, async (req, res) => {
   const { password } = req.body;
   const email = typeof req.body.email === 'string' ? req.body.email.trim() : '';
 
