@@ -1,3 +1,7 @@
+export function roundCents(value) {
+  return Math.round(value * 100) / 100 || 0;
+}
+
 const PT_MONTHS_SHORT = [
   'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
   'jul', 'ago', 'set', 'out', 'nov', 'dez',
@@ -99,7 +103,7 @@ export function groupByMonth(transactions, range) {
     else if (t.type === 'expense') bucket.expense += t.amount;
   });
 
-  return months;
+  return months.map((m) => ({ ...m, income: roundCents(m.income), expense: roundCents(m.expense) }));
 }
 
 export function groupByCategory(transactions) {
@@ -110,7 +114,7 @@ export function groupByCategory(transactions) {
       totals.set(t.category, (totals.get(t.category) || 0) + t.amount);
     });
 
-  return Array.from(totals, ([category, total]) => ({ category, total })).sort(
+  return Array.from(totals, ([category, total]) => ({ category, total: roundCents(total) })).sort(
     (a, b) => b.total - a.total
   );
 }

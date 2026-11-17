@@ -1,14 +1,15 @@
 import { Target, CheckCircle2, PiggyBank, Flag } from 'lucide-react';
 import { formatCurrency } from '../../utils/format.js';
 import { getGoalStatus } from '../../utils/goalCalculations.js';
+import { roundCents } from '../../utils/finance.js';
 import { useCurrency } from '../../hooks/useCurrency.js';
 
 export default function GoalSummary({ goals }) {
   const { currency } = useCurrency();
   const activeCount = goals.filter((g) => getGoalStatus(g) !== 'completed').length;
   const completedCount = goals.filter((g) => getGoalStatus(g) === 'completed').length;
-  const totalSaved = goals.reduce((sum, g) => sum + g.savedAmount, 0);
-  const totalTarget = goals.reduce((sum, g) => sum + g.targetAmount, 0);
+  const totalSaved = roundCents(goals.reduce((sum, g) => sum + g.savedAmount, 0));
+  const totalTarget = roundCents(goals.reduce((sum, g) => sum + g.targetAmount, 0));
 
   const tiles = [
     {

@@ -2,7 +2,7 @@ import { lazy, Suspense, useMemo, useState } from 'react';
 import ReportsFilters from './ReportsFilters.jsx';
 import ReportSummaryCards from './ReportSummaryCards.jsx';
 import { useTransactions } from '../../hooks/useTransactions.js';
-import { getPeriodRange, filterTransactions, groupByMonth, groupByCategory } from '../../utils/finance.js';
+import { getPeriodRange, filterTransactions, groupByMonth, groupByCategory, roundCents } from '../../utils/finance.js';
 
 const MonthlyTrendChart = lazy(() => import('./MonthlyTrendChart.jsx'));
 const ExpenseByCategoryChart = lazy(() => import('../dashboard/ExpenseByCategoryChart.jsx'));
@@ -32,12 +32,12 @@ export default function ReportsPage({ theme }) {
   const categoryData = useMemo(() => groupByCategory(filteredTransactions), [filteredTransactions]);
 
   const totalIncome = useMemo(
-    () => filteredTransactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0),
+    () => roundCents(filteredTransactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0)),
     [filteredTransactions]
   );
 
   const totalExpense = useMemo(
-    () => filteredTransactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0),
+    () => roundCents(filteredTransactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)),
     [filteredTransactions]
   );
 

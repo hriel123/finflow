@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell, Sector, Tooltip, ResponsiveContainer } from 'recha
 import { PieChart as PieChartIcon } from 'lucide-react';
 import { formatCurrency } from '../../utils/format.js';
 import { useCurrency } from '../../hooks/useCurrency.js';
+import { roundCents } from '../../utils/finance.js';
 
 const CATEGORY_COLORS = [
   '#6366f1', // indigo (primary)
@@ -23,7 +24,7 @@ export default function ExpenseByCategoryChart({ data, theme, emptyText = 'Você
   const { currency } = useCurrency();
   const isDark = theme === 'dark';
   const [activeIndex, setActiveIndex] = useState(undefined);
-  const total = data.reduce((sum, d) => sum + d.total, 0);
+  const total = roundCents(data.reduce((sum, d) => sum + d.total, 0));
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 h-80 flex flex-col">

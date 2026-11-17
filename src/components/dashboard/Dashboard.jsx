@@ -13,6 +13,7 @@ import {
   groupByMonth,
   groupByCategory,
   getTopCategory,
+  roundCents,
 } from '../../utils/finance.js';
 
 const IncomeExpenseChart = lazy(() => import('./IncomeExpenseChart.jsx'));
@@ -60,21 +61,25 @@ export default function Dashboard({ theme }) {
 
   const income = useMemo(
     () =>
-      filteredTransactions
-        .filter((t) => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0),
+      roundCents(
+        filteredTransactions
+          .filter((t) => t.type === 'income')
+          .reduce((sum, t) => sum + t.amount, 0)
+      ),
     [filteredTransactions]
   );
 
   const expense = useMemo(
     () =>
-      filteredTransactions
-        .filter((t) => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0),
+      roundCents(
+        filteredTransactions
+          .filter((t) => t.type === 'expense')
+          .reduce((sum, t) => sum + t.amount, 0)
+      ),
     [filteredTransactions]
   );
 
-  const balance = income - expense;
+  const balance = roundCents(income - expense);
 
   const monthlyData = useMemo(() => {
     const range = getPeriodRange(filters.period, filters.customRange);
