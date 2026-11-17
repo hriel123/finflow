@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { prisma, findOwned } from '../lib/prisma.js';
-import { textError } from '../lib/validate.js';
+import { parseId, textError } from '../lib/validate.js';
 
 const router = Router();
 
@@ -44,8 +44,8 @@ router.get('/', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id)) {
+  const id = parseId(req.params.id);
+  if (!id) {
     return res.status(400).json({ error: 'invalid category id' });
   }
 

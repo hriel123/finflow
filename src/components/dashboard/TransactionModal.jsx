@@ -47,6 +47,8 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
     }
     if (!date) {
       newErrors.date = 'Informe a data.';
+    } else if (date < '1900-01-01' || date > '2100-12-31') {
+      newErrors.date = 'Use uma data entre 1900 e 2100.';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

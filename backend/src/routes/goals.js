@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { prisma, findOwned } from '../lib/prisma.js';
-import { MAX_AMOUNT, textError } from '../lib/validate.js';
+import { MAX_AMOUNT, parseId, textError } from '../lib/validate.js';
 
 const router = Router();
 
 function parseValidDate(value) {
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
+  if (Number.isNaN(date.getTime())) return null;
+  const year = date.getUTCFullYear();
+  return year >= 1900 && year <= 2100 ? date : null;
 }
 
 router.post('/', async (req, res) => {
@@ -69,8 +71,8 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id)) {
+  const id = parseId(req.params.id);
+  if (!id) {
     return res.status(400).json({ error: 'invalid goal id' });
   }
 
@@ -84,8 +86,8 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id)) {
+  const id = parseId(req.params.id);
+  if (!id) {
     return res.status(400).json({ error: 'invalid goal id' });
   }
 
@@ -161,8 +163,8 @@ router.put('/:id', async (req, res) => {
 // two rapid clicks (or two tabs) can no longer overwrite each other based
 // on a stale savedAmount read on the client.
 router.post('/:id/deposit', async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id)) {
+  const id = parseId(req.params.id);
+  if (!id) {
     return res.status(400).json({ error: 'invalid goal id' });
   }
 
@@ -193,8 +195,8 @@ router.post('/:id/deposit', async (req, res) => {
 });
 
 router.post('/:id/withdraw', async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id)) {
+  const id = parseId(req.params.id);
+  if (!id) {
     return res.status(400).json({ error: 'invalid goal id' });
   }
 
@@ -222,8 +224,8 @@ router.post('/:id/withdraw', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id)) {
+  const id = parseId(req.params.id);
+  if (!id) {
     return res.status(400).json({ error: 'invalid goal id' });
   }
 

@@ -19,6 +19,10 @@ app.disable('x-powered-by');
 app.set('trust proxy', 3);
 app.use(cors({ origin: ['https://finflow-omega-five.vercel.app', 'http://localhost:5173'] }));
 app.use(express.json());
+app.use((req, res, next) => {
+  if (req.body === null || typeof req.body !== 'object') req.body = {};
+  next();
+});
 
 app.use('/auth', authRoutes);
 app.use('/transactions', authMiddleware, transactionsRoutes);
@@ -26,6 +30,16 @@ app.use('/goals', authMiddleware, goalsRoutes);
 app.use('/categories', authMiddleware, categoriesRoutes);
 
 app.use((err, req, res, next) => {
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: 'invalid JSON body' });
+  }
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({ error: 'request body too large' });
+  }
+  if (err.status >= 400 && err.status < 500) {
+    return res.status(err.status).json({ error: 'bad request' });
+  }
+
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === 'P2002') {
       return res.status(409).json({ error: 'resource already exists' });

@@ -36,6 +36,8 @@ export default function GoalModal({ goal, onClose, onSubmit }) {
     }
     if (!deadline) {
       newErrors.deadline = 'Informe o prazo da meta.';
+    } else if (deadline < '1900-01-01' || deadline > '2100-12-31') {
+      newErrors.deadline = 'Use uma data entre 1900 e 2100.';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
