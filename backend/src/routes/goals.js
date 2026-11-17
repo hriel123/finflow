@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { prisma, findOwned } from '../lib/prisma.js';
-import { MAX_AMOUNT, parseId, textError } from '../lib/validate.js';
+import { MAX_AMOUNT, isCents, parseId, textError } from '../lib/validate.js';
 
 const router = Router();
 
@@ -38,6 +38,10 @@ router.post('/', async (req, res) => {
 
   if (targetAmount > MAX_AMOUNT || currentAmount > MAX_AMOUNT) {
     return res.status(400).json({ error: 'amount too large' });
+  }
+
+  if (!isCents(targetAmount) || (currentAmount !== undefined && !isCents(currentAmount))) {
+    return res.status(400).json({ error: 'amounts must have at most 2 decimal places' });
   }
 
   const parsedDeadline = parseValidDate(deadline);
@@ -134,6 +138,10 @@ router.put('/:id', async (req, res) => {
     return res.status(400).json({ error: 'amount too large' });
   }
 
+  if ((targetAmount !== undefined && !isCents(targetAmount)) || (currentAmount !== undefined && !isCents(currentAmount))) {
+    return res.status(400).json({ error: 'amounts must have at most 2 decimal places' });
+  }
+
   let parsedDeadline;
   if (deadline !== undefined) {
     parsedDeadline = parseValidDate(deadline);
@@ -177,6 +185,10 @@ router.post('/:id/deposit', async (req, res) => {
     return res.status(400).json({ error: 'amount too large' });
   }
 
+  if (!isCents(amount)) {
+    return res.status(400).json({ error: 'amounts must have at most 2 decimal places' });
+  }
+
   const existing = await findOwned(prisma.goal, id, req.userId);
   if (!existing) {
     return res.status(404).json({ error: 'goal not found' });
@@ -207,6 +219,10 @@ router.post('/:id/withdraw', async (req, res) => {
 
   if (amount > MAX_AMOUNT) {
     return res.status(400).json({ error: 'amount too large' });
+  }
+
+  if (!isCents(amount)) {
+    return res.status(400).json({ error: 'amounts must have at most 2 decimal places' });
   }
 
   const existing = await findOwned(prisma.goal, id, req.userId);

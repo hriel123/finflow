@@ -1,5 +1,9 @@
 export const MAX_AMOUNT = 99999999.99;
 
+export function isCents(value) {
+  return Number(value.toFixed(2)) === value;
+}
+
 const MAX_ID = 2147483647;
 
 export function parseId(value) {

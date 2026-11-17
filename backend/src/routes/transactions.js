@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { prisma, findOwned } from '../lib/prisma.js';
-import { MAX_AMOUNT, parseId, textError } from '../lib/validate.js';
+import { MAX_AMOUNT, isCents, parseId, textError } from '../lib/validate.js';
 
 const router = Router();
 
@@ -35,6 +35,10 @@ router.post('/', async (req, res) => {
 
   if (amount > MAX_AMOUNT) {
     return res.status(400).json({ error: 'amount too large' });
+  }
+
+  if (!isCents(amount)) {
+    return res.status(400).json({ error: 'amounts must have at most 2 decimal places' });
   }
 
   const parsedDate = parseValidDate(date);
@@ -120,6 +124,10 @@ router.put('/:id', async (req, res) => {
 
   if (amount > MAX_AMOUNT) {
     return res.status(400).json({ error: 'amount too large' });
+  }
+
+  if (amount !== undefined && !isCents(amount)) {
+    return res.status(400).json({ error: 'amounts must have at most 2 decimal places' });
   }
 
   let parsedDate;
