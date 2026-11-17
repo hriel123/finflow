@@ -9,6 +9,8 @@ const SERVER_ERROR_MESSAGES = {
   'name, email and password are required': 'Preencha nome, e-mail e senha.',
   'email and password are required': 'Preencha e-mail e senha.',
   'email already registered': 'Este e-mail já está cadastrado.',
+  'current password is required': 'Para trocar o e-mail, informe sua senha atual.',
+  'current password is incorrect': 'Senha atual incorreta.',
   'too many attempts, please try again later': 'Muitas tentativas. Espere alguns minutos e tente de novo.',
   'email not configured': 'A recuperação de senha por e-mail ainda não foi ativada.',
   'invalid or expired reset link': 'Este link expirou ou já foi usado. Peça um novo em "Esqueci minha senha".',

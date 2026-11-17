@@ -34,6 +34,16 @@ const forgotLimiter = rateLimit({
   message: { error: 'too many attempts, please try again later' },
 });
 
+const profileLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => String(req.userId),
+  skipSuccessfulRequests: true,
+  message: { error: 'too many attempts, please try again later' },
+});
+
 const RESET_MINUTES = 30;
 const APP_URL = (process.env.APP_URL || 'https://finflow-omega-five.vercel.app').replace(/\/+$/, '');
 
@@ -174,11 +184,11 @@ router.get('/me', authMiddleware, async (req, res) => {
   res.json({ id: user.id, name: user.name, email: user.email });
 });
 
-router.put('/me', authMiddleware, async (req, res) => {
-  const { name } = req.body;
+router.put('/me', authMiddleware, profileLimiter, async (req, res) => {
+  const { name, currentPassword } = req.body;
   const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
 
-  const invalidText = textError([name, req.body.email], 100);
+  const invalidText = textError([name, req.body.email, currentPassword], 100);
   if (invalidText) {
     return res.status(400).json({ error: invalidText });
   }
@@ -189,6 +199,20 @@ router.put('/me', authMiddleware, async (req, res) => {
 
   if (!EMAIL_REGEX.test(email)) {
     return res.status(400).json({ error: 'invalid email format' });
+  }
+
+  const current = await prisma.user.findUnique({ where: { id: req.userId } });
+  if (!current) {
+    return res.status(404).json({ error: 'user not found' });
+  }
+
+  if (email !== current.email.toLowerCase()) {
+    if (!currentPassword) {
+      return res.status(400).json({ error: 'current password is required' });
+    }
+    if (!(await bcrypt.compare(currentPassword, current.password))) {
+      return res.status(403).json({ error: 'current password is incorrect' });
+    }
   }
 
   const existing = await prisma.user.findFirst({
@@ -204,6 +228,11 @@ router.put('/me', authMiddleware, async (req, res) => {
   });
 
   res.json({ id: user.id, name: user.name, email: user.email });
+});
+
+router.post('/logout-all', authMiddleware, async (req, res) => {
+  await prisma.user.update({ where: { id: req.userId }, data: { tokenVersion: { increment: 1 } } });
+  res.status(204).end();
 });
 
 export default router;

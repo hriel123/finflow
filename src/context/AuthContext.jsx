@@ -105,13 +105,22 @@ export function AuthProvider({ children }) {
     setUser(loggedUser);
   }
 
-  async function updateProfile(name, email) {
+  async function updateProfile(name, email, currentPassword) {
     const updatedUser = await apiRequest('/auth/me', {
       method: 'PUT',
       token,
-      body: { name, email },
+      body: { name, email, currentPassword },
     });
     setUser(updatedUser);
+  }
+
+  async function logoutAll() {
+    try {
+      await apiRequest('/auth/logout-all', { method: 'POST', token });
+    } catch (err) {
+      if (err.status !== 401) throw err;
+    }
+    logout();
   }
 
   return (
@@ -126,6 +135,7 @@ export function AuthProvider({ children }) {
         login,
         register,
         logout,
+        logoutAll,
         updateProfile,
         startDemo,
         requestPasswordReset,
