@@ -18,6 +18,7 @@ export function useCategories() {
       .catch((err) => {
         if (err.status === 401) logout();
         console.error('Não foi possível carregar as categorias:', err);
+        if (err.status !== 401) setError('Não foi possível carregar suas categorias. Recarregue a página para tentar de novo.');
       });
   }, [token]);
 

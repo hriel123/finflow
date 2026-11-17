@@ -3,6 +3,7 @@ import ReportsFilters from './ReportsFilters.jsx';
 import ReportSummaryCards from './ReportSummaryCards.jsx';
 import { useTransactions } from '../../hooks/useTransactions.js';
 import { getPeriodRange, filterTransactions, groupByMonth, groupByCategory, roundCents } from '../../utils/finance.js';
+import LoadState from '../common/LoadState.jsx';
 
 const MonthlyTrendChart = lazy(() => import('./MonthlyTrendChart.jsx'));
 const ExpenseByCategoryChart = lazy(() => import('../dashboard/ExpenseByCategoryChart.jsx'));
@@ -12,7 +13,7 @@ const cardFallback = 'bg-white dark:bg-slate-900 rounded-2xl shadow-card border 
 const DEFAULT_FILTERS = { period: 'year', customRange: null };
 
 export default function ReportsPage({ theme }) {
-  const { transactions } = useTransactions();
+  const { transactions, status, reload } = useTransactions();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
   function handleFiltersChange(patch) {
@@ -51,6 +52,8 @@ export default function ReportsPage({ theme }) {
     if (expenses.length === 0) return null;
     return expenses.reduce((max, t) => (t.amount > max.amount ? t : max), expenses[0]);
   }, [filteredTransactions]);
+
+  if (status !== 'ready') return <LoadState status={status} what="suas transações" onRetry={reload} />;
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl mx-auto">

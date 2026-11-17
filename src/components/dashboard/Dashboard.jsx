@@ -15,6 +15,7 @@ import {
   getTopCategory,
   roundCents,
 } from '../../utils/finance.js';
+import LoadState from '../common/LoadState.jsx';
 
 const IncomeExpenseChart = lazy(() => import('./IncomeExpenseChart.jsx'));
 const ExpenseByCategoryChart = lazy(() => import('./ExpenseByCategoryChart.jsx'));
@@ -31,7 +32,7 @@ const DEFAULT_FILTERS = {
 };
 
 export default function Dashboard({ theme }) {
-  const { transactions, addTransaction, deleteTransaction } = useTransactions();
+  const { transactions, addTransaction, deleteTransaction, status, reload } = useTransactions();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [modalOpen, setModalOpen] = useState(false);
   const [deletingTransaction, setDeletingTransaction] = useState(null);
@@ -103,6 +104,8 @@ export default function Dashboard({ theme }) {
   const chartEmptyText = transactions.some((t) => t.type === 'expense')
     ? 'Nenhuma despesa no período selecionado.'
     : undefined;
+
+  if (status !== 'ready') return <LoadState status={status} what="suas transações" onRetry={reload} />;
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl mx-auto">

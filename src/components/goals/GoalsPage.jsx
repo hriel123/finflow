@@ -8,6 +8,7 @@ import GoalCard from './GoalCard.jsx';
 import GoalModal from './GoalModal.jsx';
 import MoneyModal from './MoneyModal.jsx';
 import DeleteGoalModal from './DeleteGoalModal.jsx';
+import LoadState from '../common/LoadState.jsx';
 
 const DEFAULT_FILTERS = { status: 'all', category: 'all', sortBy: 'recent' };
 
@@ -28,7 +29,7 @@ function sortGoals(goals, sortBy) {
 }
 
 export default function GoalsPage() {
-  const { goals, addGoal, updateGoal, deleteGoal, addMoney, withdrawMoney } = useGoals();
+  const { goals, addGoal, updateGoal, deleteGoal, addMoney, withdrawMoney, status, reload } = useGoals();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
   const [createOpen, setCreateOpen] = useState(false);
@@ -57,6 +58,8 @@ export default function GoalsPage() {
   function handleEditSubmit(data) {
     return updateGoal(editingGoal.id, data);
   }
+
+  if (status !== 'ready') return <LoadState status={status} what="suas metas" onRetry={reload} />;
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl mx-auto">

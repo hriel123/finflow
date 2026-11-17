@@ -31,6 +31,8 @@ function toApi(goal) {
 export function useGoals() {
   const { token, logout } = useAuth();
   const [goals, setGoals] = useState([]);
+  const [status, setStatus] = useState('loading');
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!token) {
@@ -38,13 +40,18 @@ export function useGoals() {
       return;
     }
 
+    setStatus('loading');
     apiRequest('/goals', { token })
-      .then((data) => setGoals(data.map(fromApi)))
+      .then((data) => {
+        setGoals(data.map(fromApi));
+        setStatus('ready');
+      })
       .catch((err) => {
         if (err.status === 401) logout();
         console.error('Não foi possível carregar as metas:', err);
+        setStatus('error');
       });
-  }, [token]);
+  }, [token, attempt]);
 
   async function addGoal(goal) {
     try {
@@ -125,5 +132,14 @@ export function useGoals() {
     }
   }
 
-  return { goals, addGoal, updateGoal, deleteGoal, addMoney, withdrawMoney };
+  return {
+    goals,
+    addGoal,
+    updateGoal,
+    deleteGoal,
+    addMoney,
+    withdrawMoney,
+    status,
+    reload: () => setAttempt((n) => n + 1),
+  };
 }

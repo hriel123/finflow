@@ -5,11 +5,12 @@ import TransactionsTable from './TransactionsTable.jsx';
 import DeleteTransactionModal from './DeleteTransactionModal.jsx';
 import TransactionModal from '../dashboard/TransactionModal.jsx';
 import { useTransactions } from '../../hooks/useTransactions.js';
+import LoadState from '../common/LoadState.jsx';
 
 const DEFAULT_FILTERS = { type: 'all', category: 'all', search: '' };
 
 export default function TransactionsPage() {
-  const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
+  const { transactions, addTransaction, updateTransaction, deleteTransaction, status, reload } = useTransactions();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [createOpen, setCreateOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
@@ -35,6 +36,8 @@ export default function TransactionsPage() {
   function handleEditSubmit(data) {
     return updateTransaction(editingTransaction.id, data);
   }
+
+  if (status !== 'ready') return <LoadState status={status} what="suas transações" onRetry={reload} />;
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl mx-auto">

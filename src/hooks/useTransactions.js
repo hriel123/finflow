@@ -13,6 +13,8 @@ function normalize(transaction) {
 export function useTransactions() {
   const { token, logout } = useAuth();
   const [transactions, setTransactions] = useState([]);
+  const [status, setStatus] = useState('loading');
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!token) {
@@ -20,13 +22,18 @@ export function useTransactions() {
       return;
     }
 
+    setStatus('loading');
     apiRequest('/transactions', { token })
-      .then((data) => setTransactions(data.map(normalize)))
+      .then((data) => {
+        setTransactions(data.map(normalize));
+        setStatus('ready');
+      })
       .catch((err) => {
         if (err.status === 401) logout();
         console.error('Não foi possível carregar as transações:', err);
+        setStatus('error');
       });
-  }, [token]);
+  }, [token, attempt]);
 
   async function addTransaction(transaction) {
     try {
@@ -90,5 +97,7 @@ export function useTransactions() {
     income,
     expense,
     balance,
+    status,
+    reload: () => setAttempt((n) => n + 1),
   };
 }
