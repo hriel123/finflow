@@ -5,6 +5,7 @@ import { MAX_AMOUNT, isCents, parseId, textError } from '../lib/validate.js';
 const router = Router();
 
 function parseValidDate(value) {
+  if (typeof value !== 'string') return null;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return null;
   const year = date.getUTCFullYear();
