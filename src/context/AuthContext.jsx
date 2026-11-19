@@ -123,6 +123,11 @@ export function AuthProvider({ children }) {
     logout();
   }
 
+  async function deleteAccount(password) {
+    await apiRequest('/auth/me', { method: 'DELETE', token, body: { password } });
+    logout();
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -136,6 +141,7 @@ export function AuthProvider({ children }) {
         register,
         logout,
         logoutAll,
+        deleteAccount,
         updateProfile,
         startDemo,
         requestPasswordReset,

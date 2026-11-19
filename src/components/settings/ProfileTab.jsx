@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { translateServerError } from '../../lib/api.js';
 
 export default function ProfileTab() {
-  const { user, isDemo, updateProfile, logoutAll } = useAuth();
+  const { user, isDemo, updateProfile, logoutAll, deleteAccount } = useAuth();
   const [name, setName] = useState(user?.name ?? '');
   const [email, setEmail] = useState(user?.email ?? '');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -12,6 +12,10 @@ export default function ProfileTab() {
   const [submitting, setSubmitting] = useState(false);
   const [logoutAllError, setLogoutAllError] = useState('');
   const [loggingOut, setLoggingOut] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteError, setDeleteError] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   const emailChanged = !isDemo && email.trim().toLowerCase() !== (user?.email ?? '').toLowerCase();
 
@@ -40,6 +44,24 @@ export default function ProfileTab() {
       setLogoutAllError(translateServerError(err.message));
       setLoggingOut(false);
     }
+  }
+
+  async function handleDeleteAccount(e) {
+    e.preventDefault();
+    setDeleteError('');
+    setDeleting(true);
+    try {
+      await deleteAccount(deletePassword);
+    } catch (err) {
+      setDeleteError(translateServerError(err.message));
+      setDeleting(false);
+    }
+  }
+
+  function cancelDelete() {
+    setConfirmingDelete(false);
+    setDeletePassword('');
+    setDeleteError('');
   }
 
   return (
@@ -116,6 +138,57 @@ export default function ProfileTab() {
         >
           Sair de todos os aparelhos
         </button>
+      </div>
+    )}
+
+    {!isDemo && (
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-5 max-w-md">
+        <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Excluir conta</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">Apaga sua conta e todas as suas transações, metas e categorias. Não dá para desfazer.</p>
+        {confirmingDelete ? (
+          <form onSubmit={handleDeleteAccount} className="space-y-4">
+            <div>
+              <label htmlFor="delete-password" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Senha</label>
+              <input
+                id="delete-password"
+                type="password"
+                autoComplete="current-password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                required
+                autoFocus
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+              />
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Para excluir a conta, confirme sua senha.</p>
+            </div>
+            {deleteError && <p role="alert" className="text-sm text-expense-600 dark:text-expense-400">{deleteError}</p>}
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="submit"
+                disabled={deleting}
+                className="bg-expense-600 hover:bg-expense-500 disabled:opacity-60 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-expense-500/40 active:scale-[0.98]"
+              >
+                Excluir definitivamente
+              </button>
+              <button
+                type="button"
+                onClick={cancelDelete}
+                disabled={deleting}
+                className="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-60 transition-colors active:scale-[0.98]"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setConfirmingDelete(true)}
+            className="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-expense-600 dark:text-expense-400 hover:bg-expense-50 dark:hover:bg-expense-500/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-expense-500/40 active:scale-[0.98]"
+          >
+            Excluir conta
+          </button>
+        )}
       </div>
     )}
     </>
