@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import 'dotenv/config';
 import { Prisma } from '@prisma/client';
 import authRoutes from './routes/auth.js';
@@ -17,6 +18,7 @@ const app = express();
 
 app.disable('x-powered-by');
 app.set('trust proxy', 3);
+app.use(helmet());
 app.use(cors({ origin: ['https://finflow-omega-five.vercel.app', 'http://localhost:5173'] }));
 app.use(express.json());
 app.use((req, res, next) => {
