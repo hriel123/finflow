@@ -76,7 +76,11 @@ export default function LoginPage() {
         window.history.replaceState(null, '', '/');
       }
     } catch (err) {
-      setServerError(translateServerError(err.message));
+      setServerError(
+        mode === 'register' && err.message === 'email already registered'
+          ? 'Este e-mail já tem conta. Use a aba "Entrar".'
+          : translateServerError(err.message),
+      );
     } finally {
       setSubmitting(false);
     }
